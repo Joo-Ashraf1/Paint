@@ -12,6 +12,7 @@
     align-items: center;
     padding: 0 40px;
     font-family: 'Comic Sans MS', sans-serif;
+    box-sizing: border-box;
 }
 
 .file-actions {
