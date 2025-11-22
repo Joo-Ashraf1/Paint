@@ -1,0 +1,75 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.menu-bar {
+    height: 60px;
+    background-color: #fff;
+    border-bottom: 3px solid #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    font-family: 'Comic Sans MS', sans-serif;
+}
+
+.file-actions {
+    display: flex;
+    gap: 30px;
+}
+
+.action-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.action-group:hover .action-label {
+    text-decoration: underline;
+}
+
+.triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 10px solid #000;
+}
+
+.history-actions {
+    display: flex;
+    gap: 30px;
+}
+
+.history-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.history-btn:hover {
+    transform: scale(1.1);
+}
+
+.arrow-icon {
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.undo-icon {
+    transform: rotate(-10deg);
+}
+
+.redo-icon {
+    transform: rotate(10deg);
+}
+
+.action-label {
+    font-size: 16px;
+    color: #333;
+}
