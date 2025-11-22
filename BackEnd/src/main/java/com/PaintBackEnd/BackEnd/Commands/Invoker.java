@@ -1,0 +1,37 @@
+package com.PaintBackEnd.BackEnd.Commands;
+
+import java.util.Stack;
+
+public class Invoker {
+    private final Stack<Command> undoStack = new Stack<>();
+    private final Stack<Command> redoStack = new Stack<>();
+
+    public void execute(Command c){
+        c.execute();
+        undoStack.push(c);
+        redoStack.clear();
+    }
+
+    public void undo(){
+        if(!undoStack.isEmpty()) {
+            Command c = undoStack.pop();
+            c.undo();
+            redoStack.push(c);
+        }
+    }
+
+    public void redo(){
+        if (!redoStack.isEmpty()) {
+            Command c = redoStack.pop();
+            c.execute();
+            undoStack.push(c);
+        }
+    }
+
+    public void clearRedoStack(){
+        redoStack.clear();
+    }
+    public void clearUndoStack(){
+        undoStack.clear();
+    }
+}
