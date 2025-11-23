@@ -1,61 +1,62 @@
 <section #canvas_wrap_ref class="canvas-wrapper">
     <div class="paper">
-        <ko-stage class="canvas" [config]="configStage" (click)="checkDeselect($event.event)"
-            (mousedown)="handleStageMouseDown($event.event)" (mousemove)="handleStageMouseMove($event.event)"
-            (mouseup)="handleStageMouseUp($event.event)">
+        <ko-stage #stageRef class="canvas" [config]="configStage" (click)="checkDeselect($event)"
+            (mousedown)="handleStageMouseDown()" (mousemove)="handleStageMouseMove()"
+            (mouseup)="handleStageMouseUp()">
             <ko-layer class="canvas">
 
                 <!-- <ko-text [config]="mousePosText"></ko-text> -->
                 <!-- <ko-text [config]="ShapePosText"></ko-text> -->
 
-                <ko-rect [config]="rubber_band">
-                </ko-rect>
+                <ko-rect [config]="rubber_band"></ko-rect>
+                <ko-line [config]="line_rubber_band"></ko-line>
 
                 @for (shapeConfig of shapeConfigs; track $index) {
                 @if (shapeConfig['type'] === 'circle') {
-                <ko-circle #circleRef [config]="shapeConfig" (dragend)="handleDragEnd($event.event, $index)"
-                    (transformend)="handleTransformEnd($event.event, $index)"
-                    (mousemove)="handleMouseMove($event.event, shapeConfig)" (mouseover)="handleMouseOver($event.event)"
-                    (dragmove)="handleDragMove($event.event, $index)" (mouseup)="handeMouseUp($event.event)"
-                    (mouseleave)="handleMouseLeave($event.event)" (click)="select(circleRef)">
+                <ko-circle #circleRef [config]="shapeConfig" (dragend)="handleDragEnd($event, $index)"
+                    (transformend)="handleTransformEnd($event, $index)"
+                    (mousemove)="handleMouseMove($event, shapeConfig)" (mouseover)="handleMouseOver($event)"
+                    (dragmove)="handleDragMove($event, $index)" (mouseup)="handeMouseUp($event)"
+                    (mouseleave)="handleMouseLeave($event)" (click)="select($event)">
                 </ko-circle>
                 }
                 @else if (shapeConfig['type'] === 'rectangle' || shapeConfig['type'] === 'square') {
-                <ko-rect #rectRef [config]="shapeConfig" (dragend)="handleDragEnd($event.event, $index)"
-                    (transformend)="handleTransformEnd($event.event, $index)"
-                    (mousemove)="handleMouseMove($event.event, shapeConfig)" (mouseover)="handleMouseOver($event.event)"
-                    (dragmove)="handleDragMove($event.event, $index)" (mouseup)="handeMouseUp($event.event)"
-                    (mouseleave)="handleMouseLeave($event.event)" (click)="select(rectRef)">
+                <ko-rect #rectRef [config]="shapeConfig" (dragend)="handleDragEnd($event, $index)"
+                    (transformend)="handleTransformEnd($event, $index)"
+                    (mousemove)="handleMouseMove($event, shapeConfig)" (mouseover)="handleMouseOver($event)"
+                    (dragmove)="handleDragMove($event, $index)" (mouseup)="handeMouseUp($event)"
+                    (mouseleave)="handleMouseLeave($event)" (click)="select($event)">
                 </ko-rect>
                 }
                 @else if (shapeConfig['type'] === 'ellipse') {
-                <ko-ellipse #ellipseRef [config]="shapeConfig" (dragend)="handleDragEnd($event.event, $index)"
-                    (transformend)="handleTransformEnd($event.event, $index)"
-                    (mousemove)="handleMouseMove($event.event, shapeConfig)" (mouseover)="handleMouseOver($event.event)"
-                    (dragmove)="handleDragMove($event.event, $index)" (mouseup)="handeMouseUp($event.event)"
-                    (mouseleave)="handleMouseLeave($event.event)" (click)="select(ellipseRef)">
+                <ko-ellipse #ellipseRef [config]="shapeConfig" (dragend)="handleDragEnd($event, $index)"
+                    (transformend)="handleTransformEnd($event, $index)"
+                    (mousemove)="handleMouseMove($event, shapeConfig)" (mouseover)="handleMouseOver($event)"
+                    (dragmove)="handleDragMove($event, $index)" (mouseup)="handeMouseUp($event)"
+                    (mouseleave)="handleMouseLeave($event)" (click)="select($event)">
                 </ko-ellipse>
                 }
                 @else if (shapeConfig['type'] === 'line') {
-                <ko-line #lineRef [config]="shapeConfig" (dragend)="handleDragEnd($event.event, $index)"
-                    (transformend)="handleTransformEnd($event.event, $index)"
-                    (mousemove)="handleMouseMove($event.event, shapeConfig)" (mouseover)="handleMouseOver($event.event)"
-                    (dragmove)="handleDragMove($event.event, $index)" (mouseup)="handeMouseUp($event.event)"
-                    (mouseleave)="handleMouseLeave($event.event)" (click)="select(lineRef)">
+                <ko-line #lineRef [config]="shapeConfig" (dragend)="handleDragEnd($event, $index)"
+                    (transformend)="handleTransformEnd($event, $index)"
+                    (mousemove)="handleMouseMove($event, shapeConfig)" (mouseover)="handleMouseOver($event)"
+                    (dragmove)="handleDragMove($event, $index)" (mouseup)="handeMouseUp($event)"
+                    (mouseleave)="handleMouseLeave($event)" (click)="select($event)">
                 </ko-line>
                 }
                 @else if (shapeConfig['type'] === 'triangle' || shapeConfig['type'] === 'pentagon' ||
                 shapeConfig['type'] === 'hexagon') {
                 <ko-regular-polygon #regularPolygonRef [config]="shapeConfig"
-                    (dragend)="handleDragEnd($event.event, $index)"
-                    (transformend)="handleTransformEnd($event.event, $index)"
-                    (mousemove)="handleMouseMove($event.event, shapeConfig)" (mouseover)="handleMouseOver($event.event)"
-                    (dragmove)="handleDragMove($event.event, $index)" (mouseup)="handeMouseUp($event.event)"
-                    (mouseleave)="handleMouseLeave($event.event)" (click)="select(regularPolygonRef)">
+                    (dragend)="handleDragEnd($event, $index)"
+                    (transformend)="handleTransformEnd($event, $index)"
+                    (mousemove)="handleMouseMove($event, shapeConfig)" (mouseover)="handleMouseOver($event)"
+                    (dragmove)="handleDragMove($event, $index)" (mouseup)="handeMouseUp($event)"
+                    (mouseleave)="handleMouseLeave($event)" (click)="select($event)">
                 </ko-regular-polygon>
                 }
                 }
-                <ko-transformer #transformer></ko-transformer>
+                <ko-transformer #transformer [config]="trans_all"></ko-transformer>
+                <ko-transformer #transReg [config]="trans_regular"></ko-transformer>
             </ko-layer>
         </ko-stage>
     </div>

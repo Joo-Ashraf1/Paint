@@ -1,41 +1,50 @@
 {
-  "hash": "2ac0f4d0",
-  "configHash": "21e9eed3",
+  "hash": "5e985074",
+  "configHash": "4205d5a9",
   "lockfileHash": "3c38138e",
-  "browserHash": "b4af6dc2",
+  "browserHash": "c07b34e9",
   "optimized": {
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "43400e75",
+      "fileHash": "8eeb8c6d",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "5d118f93",
+      "fileHash": "679872ff",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "0925e2ca",
+      "fileHash": "3537b2b4",
       "needsInterop": false
     },
     "ng2-konva": {
       "src": "../../../../../../node_modules/ng2-konva/fesm2022/ng2-konva.mjs",
       "file": "ng2-konva.js",
-      "fileHash": "d59e8718",
+      "fileHash": "5d42a08a",
       "needsInterop": false
     },
     "zone.js": {
       "src": "../../../../../../node_modules/zone.js/fesm2015/zone.js",
       "file": "zone__js.js",
-      "fileHash": "4a278b97",
+      "fileHash": "9925c1a5",
       "needsInterop": true
+    },
+    "konva": {
+      "src": "../../../../../../node_modules/konva/lib/index.js",
+      "file": "konva.js",
+      "fileHash": "8a79a673",
+      "needsInterop": false
     }
   },
   "chunks": {
+    "chunk-OEC3SPCH": {
+      "file": "chunk-OEC3SPCH.js"
+    },
     "chunk-T4BHGBBV": {
       "file": "chunk-T4BHGBBV.js"
     },
