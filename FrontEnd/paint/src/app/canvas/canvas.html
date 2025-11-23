@@ -1,5 +1,5 @@
-<section #canvas_wrap_ref class="canvas-wrapper">
-    <div class="paper">
+<section class="canvas-wrapper">
+    <div #canvas_wrap_ref class="paper">
         <ko-stage #stageRef class="canvas" [config]="configStage" (click)="checkDeselect($event)"
             (mousedown)="handleStageMouseDown()" (mousemove)="handleStageMouseMove()"
             (mouseup)="handleStageMouseUp()">

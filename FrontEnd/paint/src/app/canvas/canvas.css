@@ -1,6 +1,7 @@
 :host {
     display: block;
     height: 100%;
+    width: 100%;
     flex-grow: 1;
     overflow: hidden;
     box-sizing: border-box;
@@ -9,15 +10,18 @@
 .canvas-wrapper {
     width: 100%;
     height: 100%;
-    background-color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    
+    background-color: #e0e0e0;
+    /* Grey background to show paper edges */
+    overflow: auto;
+    /* Enable Scrolling */
+    display: block;
+    padding: 20px;
 }
 
 .paper {
-    width: 100%;
-    height: 100%;
+    width: 2000px;
+    /* Big Paper */
+    height: 2000px;
+    background-color: white;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
