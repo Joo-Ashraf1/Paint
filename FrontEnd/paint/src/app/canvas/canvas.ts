@@ -1,4 +1,5 @@
-import { Component, ViewChild, Input, Output, EventEmitter } from '@angular/core'
+import { Component, ViewChild, Input, Output, EventEmitter, ElementRef } from '@angular/core'
+import { limitToStage } from './canvas.utils';
 import type { StageConfig } from 'konva/lib/Stage'
 import { Shape, ShapeConfig } from 'konva/lib/Shape'
 import type { CircleConfig } from 'konva/lib/shapes/Circle'
@@ -36,7 +37,7 @@ export class Canvas {
   @ViewChild('ellipseRef') ellipseRef! : KonvaComponent
   @ViewChild('regularPolygonRef') regularPolygonRef! : KonvaComponent
   @ViewChild('selectionButtons') selectionButtons! : KonvaComponent
-  @ViewChild("canvas_wrap_ref") canvas_wrap_element! : KonvaComponent
+  @ViewChild("canvas_wrap_ref") canvas_wrap_element : any
   @ViewChild('stageRef') stageRef! : KonvaComponent;
   @Input("currentTool") currentTool = 'select'
   @Output("currentToolChange") currentToolChange = new EventEmitter<string>()
@@ -52,7 +53,16 @@ export class Canvas {
 
   public configStage: StageConfig = {
     width: window.innerWidth,
-    height: window.innerHeight,
+    height: window.innerHeight
+  }
+
+  ngAfterViewInit() {
+    const rect = this.canvas_wrap_element.nativeElement.getBoundingClientRect()
+
+    this.configStage = {
+      width : rect.width,
+      height : rect.height
+    }
   }
 
   public rect1 : RectConfig = {
@@ -65,6 +75,7 @@ export class Canvas {
     height : 100,
     width : 200,
     draggable : true,
+    dragBoundFunc : limitToStage,
     visible : true
   }
 
@@ -166,9 +177,21 @@ export class Canvas {
   handleStageMouseUp() {
     this.isDrawing = false
 
-    this.rubber_band = {...this.rubber_band, visible : false}
     const height = (this.rubber_band.height) ? this.rubber_band.height : 0
     const width = (this.rubber_band.width) ? this.rubber_band.width : 0
+
+    this.rubber_band = {
+      ...this.rubber_band, 
+      height : 0,
+      width : 0,
+      visible : false
+    }
+
+    this.line_rubber_band = {
+      ...this.line_rubber_band,
+      points : [],
+      visible : false
+    }
 
     if (this.currentTool === "line") {
       const line : LineConfig = {
@@ -179,6 +202,7 @@ export class Canvas {
         stroke : this.currentStrokeColor,
         strokeWidth : this.currentStrokeWidth,
         draggable : true,
+        dragBoundFunc : limitToStage,
         type : "line"
       }
       this.shapeConfigs.push(line);
@@ -194,6 +218,7 @@ export class Canvas {
         stroke : this.currentStrokeColor,
         strokeWidth : this.currentStrokeWidth,
         draggable : true,
+        dragBoundFunc : limitToStage,
         type : "square"
       }
       this.shapeConfigs.push(square);
@@ -209,6 +234,7 @@ export class Canvas {
         stroke : this.currentStrokeColor,
         strokeWidth : this.currentStrokeWidth,
         draggable : true,
+        dragBoundFunc : limitToStage,
         type : "rectangle"
       }
       this.shapeConfigs.push(rectangle);
@@ -223,6 +249,7 @@ export class Canvas {
         stroke : this.currentStrokeColor,
         strokeWidth : this.currentStrokeWidth,
         draggable : true,
+        dragBoundFunc : limitToStage,
         type : "circle"
       }
       this.shapeConfigs.push(circle);
@@ -237,6 +264,7 @@ export class Canvas {
         stroke : this.currentStrokeColor,
         strokeWidth : this.currentStrokeWidth,
         draggable : true,
+        dragBoundFunc : limitToStage,
         type : "ellipse"
       }
       this.shapeConfigs.push(ellipse);
@@ -252,6 +280,7 @@ export class Canvas {
         stroke : this.currentStrokeColor,
         strokeWidth : this.currentStrokeWidth,
         draggable : true,
+        dragBoundFunc : limitToStage,
         type : "triangle"
       }
       this.shapeConfigs.push(triangle)
@@ -259,12 +288,6 @@ export class Canvas {
 
     this.currentTool = 'select'
     this.currentToolChange.emit(this.currentTool)
-
-    this.rubber_band = {
-      ...this.rubber_band, 
-      height : 0,
-      width : 0
-    }
   }
 
   public select(event : NgKonvaEventObject<MouseEvent>) {
