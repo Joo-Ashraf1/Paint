@@ -1,6 +1,6 @@
 package com.PaintBackEnd.BackEnd.Services;
 
-import com.PaintBackEnd.BackEnd.Commands.*;
+import com.PaintBackEnd.BackEnd.Command.*;
 import com.PaintBackEnd.BackEnd.Shapes.Shape;
 import com.PaintBackEnd.BackEnd.Shapes.ShapeDTO;
 import com.PaintBackEnd.BackEnd.Shapes.ShapesFactory;
@@ -11,34 +11,48 @@ import org.springframework.stereotype.Service;
 public class PaintService {
 
 
-    private final ShapesFactory factory = new ShapesFactory();
-    private final Invoker invocer = new Invoker() ;
+    private final ShapesFactory shapesFactory = new ShapesFactory();
+    private final CommandFactory commandFactory = new CommandFactory();
+    private final CommandManager commandManager = CommandManager.getInstance() ;
 
     public PaintService(){}
 
     public void draw (ShapeDTO dto){
-        Shape shape = factory.makeShape(dto);
-        invocer.execute(new Draw(shape));
+        dto.id = 0 ;
+        Shape shape = shapesFactory.makeShape(dto);
+        Command command = commandFactory.makeCommand("draw" , shape) ;
+        commandManager.executeCommand(command);
     }
 
     public void delete(ShapeDTO dto){
-        Shape shape = factory.makeShape(dto);
-        shape.setId(dto.id);
-        invocer.execute(new Delete(shape));
+        Shape shape = shapesFactory.makeShape(dto);
+        Command command = commandFactory.makeCommand("delete" , shape) ;
+        commandManager.executeCommand(command);
     }
 
-    public void move(ShapeDTO dto){
-        Shape shape = factory.makeShape(dto);
-        shape.setId(dto.id);
-        invocer.execute(new Move(shape));
+    public void update(ShapeDTO dto){
+        Shape shape = shapesFactory.makeShape(dto);
+        Command command = commandFactory.makeCommand("update" , shape) ;
+        commandManager.executeCommand(command);
+    }
+
+    public void copy(ShapeDTO dto){
+        Shape shape = shapesFactory.makeShape(dto);
+        Command command = commandFactory.makeCommand("copy" , shape) ;
+        commandManager.executeCommand(command);
     }
 
     public void undo(){
-        invocer.undo();
+        commandManager.undo();
     }
 
     public void redo(){
-        invocer.redo();
+        commandManager.redo();
     }
+
+    public void save(){
+
+    }
+
 
 }

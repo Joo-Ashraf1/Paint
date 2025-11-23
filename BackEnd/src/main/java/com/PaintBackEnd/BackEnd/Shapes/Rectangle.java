@@ -1,5 +1,7 @@
 package com.PaintBackEnd.BackEnd.Shapes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 public class Rectangle extends Shape {
     private double width;
     private double height;
@@ -12,8 +14,22 @@ public class Rectangle extends Shape {
     }
 
     public Rectangle() {
-
+        super();
+        this.setShapeType("rectangle");
     }
+
+    public Shape clone() {
+        ShapeDTO dto;
+        dto = super.mapper.toDto(this);
+        dto.id = 0;
+        dto.x_end += 3;
+        dto.y_end += 3;
+        dto.x_start += 3;
+        dto.y_start += 3;
+        return super.factory.makeShape(dto);
+    }
+
+
 
     public double getWidth() {
         return width;

@@ -7,8 +7,10 @@ import com.PaintBackEnd.BackEnd.Shapes.ShapeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 public class ShapeController {
@@ -22,29 +24,36 @@ public class ShapeController {
     }
 
     @GetMapping("/undo")
-    public void undo(){
+    public List<ShapeDTO> undo(){
         paintsrv.undo();
+        return mem.getAllDtos();
     }
 
     @GetMapping("/redo")
-    public void redo(){
+    public List<ShapeDTO> redo(){
         paintsrv.redo();
+        return mem.getAllDtos();
     }
 
-    @PutMapping("/move")
+    @PutMapping("/update")
     public void update(@RequestBody ShapeDTO shapeDTO){
-        paintsrv.move(shapeDTO);
+        paintsrv.update(shapeDTO);
     }
 
     @DeleteMapping("/delete")
     public void delete(@RequestBody ShapeDTO shapeDTO){
+
         paintsrv.delete(shapeDTO);
     }
 
-    @GetMapping("/all")
-    public List<Shape> getall(){
-        return mem.getAllShapes();
+    @PostMapping("/copy")
+    public void Copy(@RequestBody ShapeDTO shapeDTO) {
+        paintsrv.copy(shapeDTO);
     }
 
 
+    @GetMapping("/all")
+    public List<ShapeDTO> getall(){
+        return mem.getAllDtos();
+    }
 }
