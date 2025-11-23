@@ -88,6 +88,15 @@
     border: 2px solid #000;
     transform: scale(1.1);
 }
+.swatch:active {
+  border: 3px solid white;
+  transform: scale(1.2);
+}
+.swatch.selected {
+  border: 3px solid deeppink;
+  transform: scale(1.2);
+  box-shadow: 0 0 5px deeppink;
+}
 
 .red {
     background-color: #ff0000;
