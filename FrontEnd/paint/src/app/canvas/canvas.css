@@ -1,0 +1,23 @@
+:host {
+    display: block;
+    height: 100%;
+    flex-grow: 1;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.canvas-wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    
+}
+
+.paper {
+    width: 100%;
+    height: 100%;
+}
