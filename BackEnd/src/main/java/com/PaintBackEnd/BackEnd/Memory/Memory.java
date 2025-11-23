@@ -1,48 +1,57 @@
 package com.PaintBackEnd.BackEnd.Memory;
 
-import com.PaintBackEnd.BackEnd.Shapes.Shape;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Memory {
-    private HashMap<Integer, Shape> shapes = new HashMap<>();
-    private int idCounter = 1;
+import com.PaintBackEnd.BackEnd.Shapes.Shape;
 
-    // For Singleton
-    private static Memory memory = null;
+public class Memory {
+
+    private static Memory memory;
+
+    private HashMap<Integer, Shape> memoryShapes = new HashMap<>();
+    private static int idCounter = 0;
 
     private Memory() {
     }
 
+    // Singleton
     public static Memory getInstance() {
-        if (memory == null) memory =  new Memory();
-
+        if (memory == null)
+            memory = new Memory();
         return memory;
-
     }
 
-    public void addShape(Shape s) {
-        if (s.getId() == 0) {
-            s.setId(idCounter++);
-        }
-        shapes.put(s.getId(), s);
+    public int addShape(Shape shape) {
+        incrementIdCounter();
+        if (shape.getId() == 0) //////////
+            shape.setId(idCounter);
+        memoryShapes.put(idCounter, shape);
+        return shape.getId();
     }
 
-    public void updateShape(int id, Shape s) {
-        shapes.put(id, s);
+    public Shape deleteShape(Shape shape) {
+        return memoryShapes.remove(shape.getId());
     }
 
-    public void deleteShape(int id) {
-        shapes.remove(id);
+    public void update(Shape shape) {
+        memoryShapes.replace(shape.getId(), shape);
     }
 
-    public Shape getById(int id) {
-        return shapes.get(id);
+    public Shape getById(int shapeId) {
+        return memoryShapes.get(shapeId);
     }
 
     public List<Shape> getAllShapes() {
-        return new ArrayList<>(shapes.values());
+        return new ArrayList<>(memoryShapes.values());
+    }
+
+    private void incrementIdCounter() {
+        idCounter++;
+    }
+
+    public void clear() {
+        memoryShapes.clear();
     }
 }

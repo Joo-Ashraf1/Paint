@@ -1,14 +1,20 @@
 package com.PaintBackEnd.BackEnd.Shapes;
 
+
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Component
 public class ShapeMapper {
-    public static ObjectMapper mapper = new ObjectMapper();
+    public  ObjectMapper mapper = new ObjectMapper();
 
-    public static ShapeDTO toDto(Shape s) throws JsonProcessingException {
+    public  ShapeDTO toDto(Shape s) throws JsonProcessingException {
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(s);
         return mapper.readValue(json, ShapeDTO.class);
     }
+
+    
 
 }

@@ -1,6 +1,6 @@
 package com.PaintBackEnd.BackEnd.Services;
 
-import com.PaintBackEnd.BackEnd.Commands.*;
+import com.PaintBackEnd.BackEnd.Command.*;
 import com.PaintBackEnd.BackEnd.Shapes.Shape;
 import com.PaintBackEnd.BackEnd.Shapes.ShapeDTO;
 import com.PaintBackEnd.BackEnd.Shapes.ShapesFactory;
@@ -12,33 +12,37 @@ public class PaintService {
 
 
     private final ShapesFactory factory = new ShapesFactory();
-    private final Invoker invocer = new Invoker() ;
+    private final CommandManager commandManager = new CommandManager() ;
 
     public PaintService(){}
 
     public void draw (ShapeDTO dto){
+        dto.id = 0 ;
         Shape shape = factory.makeShape(dto);
-        invocer.execute(new Draw(shape));
+        commandManager.executeCommand(new Draw(shape));
     }
 
     public void delete(ShapeDTO dto){
         Shape shape = factory.makeShape(dto);
-        shape.setId(dto.id);
-        invocer.execute(new Delete(shape));
+        commandManager.executeCommand(new Delete(shape));
     }
 
-    public void move(ShapeDTO dto){
+    public void update(ShapeDTO dto){
         Shape shape = factory.makeShape(dto);
-        shape.setId(dto.id);
-        invocer.execute(new Move(shape));
+        commandManager.executeCommand(new Update(shape));
+    }
+
+    public void copy(ShapeDTO dto){
+        Shape shape = factory.makeShape(dto);
+        commandManager.executeCommand(new Copy(shape));
     }
 
     public void undo(){
-        invocer.undo();
+        commandManager.undo();
     }
 
     public void redo(){
-        invocer.redo();
+        commandManager.redo();
     }
 
 }
