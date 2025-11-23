@@ -30,6 +30,9 @@ export class Canvas {
   @ViewChild('selectionButtons') selectionButtons! : any
   @ViewChild("canvas_wrap_ref") canvas_wrap_element! : any
   currentTool = 'select'
+  currentFillColor = "white"
+  currentStrokeColor = "black"
+  currentStrokeWidth = 3
 
   isDrawing : boolean = false
   x_start : number = 0
@@ -109,9 +112,9 @@ export class Canvas {
         y : this.y_start,
         height : this.rubber_band.height,
         width : this.rubber_band.width,
-        fill : "red",
-        stroke : "black",
-        strokeWidth : 4,
+        fill : this.currentFillColor,
+        stroke : this.currentStrokeColor,
+        strokeWidth : this.currentStrokeWidth,
         draggable : true,
         type : "rectangle"
       }
@@ -123,9 +126,9 @@ export class Canvas {
         y : Math.abs(this.y_end + this.y_start) / 2,
         radiusY : (this.rubber_band.height) ?  this.rubber_band.height/ 2: 0,
         radiusX : (this.rubber_band.width) ?  this.rubber_band.width/ 2: 0,
-        fill : "red",
-        stroke : "black",
-        strokeWidth : 4,
+        fill : this.currentFillColor,
+        stroke : this.currentStrokeColor,
+        strokeWidth : this.currentStrokeWidth,
         draggable : true,
         type : "ellipse"
       }
