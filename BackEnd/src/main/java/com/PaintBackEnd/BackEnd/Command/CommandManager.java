@@ -4,9 +4,15 @@ import java.util.Stack;
 
 public class CommandManager {
 
-    private static Stack<Command> redoStack = new Stack<>();
-    private static Stack<Command> undoStack = new Stack<>();
+    private static CommandManager commandManager = null ;
+    private final Stack<Command> redoStack = new Stack<>();
+    private final Stack<Command> undoStack = new Stack<>();
 
+    private CommandManager(){}
+    public static CommandManager getInstance(){
+        if(commandManager == null) commandManager = new CommandManager() ;
+        return commandManager ;
+    }
     public void executeCommand(Command command) {
         command.execute();
         undoStack.push(command);

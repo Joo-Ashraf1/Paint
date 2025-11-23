@@ -1,7 +1,23 @@
 package com.PaintBackEnd.BackEnd.Shapes;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "shapeType"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Circle.class, name = "circle"),
+        @JsonSubTypes.Type(value = Rectangle.class, name = "rectangle"),
+        @JsonSubTypes.Type(value = Triangle.class, name = "triangle"),
+        @JsonSubTypes.Type(value = Ellipse.class, name = "ellipse"),
+        @JsonSubTypes.Type(value = Line.class, name = "line"),
+        @JsonSubTypes.Type(value = Square.class, name = "square")
+
+})
 public abstract class Shape implements Cloneable {
     private String shapeType;
     private int id;
@@ -16,9 +32,9 @@ public abstract class Shape implements Cloneable {
     private int strokeWidth;
     private int rotation;
 
-    @Autowired
-    protected ShapeMapper mapper ;
-    protected ShapesFactory factory ;
+
+    protected ShapeMapper mapper = new ShapeMapper();
+    protected ShapesFactory factory = new ShapesFactory();
 
     public Shape(ShapeDTO dto) {
         this.shapeType = dto.shapeType;
@@ -28,6 +44,8 @@ public abstract class Shape implements Cloneable {
         this.y_end = dto.y_end;
         this.fill = dto.fill;
         this.stroke = dto.stroke;
+        this.rotation = dto.rotation;
+        this.strokeWidth = dto.strokeWidth;
         this.id = dto.id ;
         calculateCenter();
     }

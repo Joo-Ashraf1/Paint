@@ -11,30 +11,35 @@ import org.springframework.stereotype.Service;
 public class PaintService {
 
 
-    private final ShapesFactory factory = new ShapesFactory();
-    private final CommandManager commandManager = new CommandManager() ;
+    private final ShapesFactory shapesFactory = new ShapesFactory();
+    private final CommandFactory commandFactory = new CommandFactory();
+    private final CommandManager commandManager = CommandManager.getInstance() ;
 
     public PaintService(){}
 
     public void draw (ShapeDTO dto){
         dto.id = 0 ;
-        Shape shape = factory.makeShape(dto);
-        commandManager.executeCommand(new Draw(shape));
+        Shape shape = shapesFactory.makeShape(dto);
+        Command command = commandFactory.makeCommand("draw" , shape) ;
+        commandManager.executeCommand(command);
     }
 
     public void delete(ShapeDTO dto){
-        Shape shape = factory.makeShape(dto);
-        commandManager.executeCommand(new Delete(shape));
+        Shape shape = shapesFactory.makeShape(dto);
+        Command command = commandFactory.makeCommand("delete" , shape) ;
+        commandManager.executeCommand(command);
     }
 
     public void update(ShapeDTO dto){
-        Shape shape = factory.makeShape(dto);
-        commandManager.executeCommand(new Update(shape));
+        Shape shape = shapesFactory.makeShape(dto);
+        Command command = commandFactory.makeCommand("update" , shape) ;
+        commandManager.executeCommand(command);
     }
 
     public void copy(ShapeDTO dto){
-        Shape shape = factory.makeShape(dto);
-        commandManager.executeCommand(new Copy(shape));
+        Shape shape = shapesFactory.makeShape(dto);
+        Command command = commandFactory.makeCommand("copy" , shape) ;
+        commandManager.executeCommand(command);
     }
 
     public void undo(){
@@ -44,5 +49,10 @@ public class PaintService {
     public void redo(){
         commandManager.redo();
     }
+
+    public void save(){
+
+    }
+
 
 }

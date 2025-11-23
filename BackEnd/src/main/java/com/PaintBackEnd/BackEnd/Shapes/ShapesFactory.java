@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShapesFactory {
     public Shape makeShape(ShapeDTO dto) {
-        switch (dto.shapeType) {
+        switch (dto.shapeType.toLowerCase()) {
             case "circle":
                 return new Circle(dto);
             case "square":

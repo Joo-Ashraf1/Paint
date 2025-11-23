@@ -24,13 +24,15 @@ public class ShapeController {
     }
 
     @GetMapping("/undo")
-    public void undo(){
+    public List<ShapeDTO> undo(){
         paintsrv.undo();
+        return mem.getAllDtos();
     }
 
     @GetMapping("/redo")
-    public void redo(){
+    public List<ShapeDTO> redo(){
         paintsrv.redo();
+        return mem.getAllDtos();
     }
 
     @PutMapping("/update")
@@ -40,18 +42,18 @@ public class ShapeController {
 
     @DeleteMapping("/delete")
     public void delete(@RequestBody ShapeDTO shapeDTO){
+
         paintsrv.delete(shapeDTO);
     }
 
     @PostMapping("/copy")
     public void Copy(@RequestBody ShapeDTO shapeDTO) {
-    
         paintsrv.copy(shapeDTO);
     }
-    
+
 
     @GetMapping("/all")
-    public List<Shape> getall(){
-        return mem.getAllShapes();
+    public List<ShapeDTO> getall(){
+        return mem.getAllDtos();
     }
 }

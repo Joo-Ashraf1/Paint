@@ -1,9 +1,11 @@
 package com.PaintBackEnd.BackEnd.Shapes;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class ShapeDTO {
 
     public String shapeType;
@@ -20,7 +22,7 @@ public class ShapeDTO {
     // COLOR
     public String fill;
     public String stroke;
-    public String strokeWidth;
+    public int strokeWidth;
 
     // SQUARE // TRIANGLE
     public double side;
@@ -33,7 +35,7 @@ public class ShapeDTO {
     public double radius;
 
     // ELLIPSE
-    public double x_radius;
-    public double y_radius;
+    public double radius_x;
+    public double radius_y;
 
 }
