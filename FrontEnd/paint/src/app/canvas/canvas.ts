@@ -40,12 +40,27 @@ export class Canvas {
   x_end : number = 0
   y_end : number = 0
 
-  shapeConfigs : ShapeConfig[] = []
+  
 
   public configStage: StageConfig = {
     width: window.innerWidth,
     height: window.innerHeight,
   }
+
+  public rect1 : RectConfig = {
+    x : 100,
+    y : 100,
+    fill : "red",
+    stroke : "black",
+    type : "rectangle",
+    strokeWidth : 4,
+    height : 100,
+    width : 200,
+    draggable : true,
+    visible : true
+  }
+
+  shapeConfigs : ShapeConfig[] = [this.rect1]
 
   public rubber_band : RectConfig = {
     x : this.x_start,
@@ -61,12 +76,12 @@ export class Canvas {
 
   public trans1: TransformerConfig = {
     rotateEnabled: true,
-  enabledAnchors: [
-    'top-left',
-    'top-right',
-    'bottom-left',
-    'bottom-right'
-  ]
+    enabledAnchors: [
+      'top-left',
+      'top-right',
+      'bottom-left',
+      'bottom-right'
+    ]
   }
 
   handleStageMouseDown(event : any) {
