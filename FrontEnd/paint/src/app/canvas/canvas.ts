@@ -60,6 +60,7 @@ export class Canvas {
     visible: false,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
+    draggable : true,
     type : "line"
   }
   squareShape: RectConfig = {
@@ -71,6 +72,7 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
+    draggable : true,
     type : "square"
     
   };
@@ -83,6 +85,7 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
+    draggable : true,
     type : "rectangle"
 
   };
@@ -94,6 +97,7 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
+    draggable : true,
     type : "circle"
   };
   ellipseShape: EllipseConfig = {
@@ -105,6 +109,7 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
+    draggable : true,
     type : "ellipse"
   };
   triangleShape: RegularPolygonConfig = {
@@ -116,6 +121,7 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
+    draggable : true,
     type : "triangle"
   };
 
@@ -332,27 +338,27 @@ export class Canvas {
     switch (this.currentTool) {
       case "line":
         this.shapeConfigs.push({ ...this.lineShape })
-        this.lineShape.visible = false
+        this.lineShape = {...this.lineShape, visible : false}
         break;
       case "square":
         this.shapeConfigs.push({ ...this.squareShape })
-        this.squareShape.visible = false
+        this.squareShape = {...this.squareShape, visible : false}
         break;
       case "rectangle":
         this.shapeConfigs.push({ ...this.rectangleShape })
-        this.rectangleShape.visible = false
+        this.rectangleShape = {...this.rectangleShape, visible : false}
         break;
       case "circle":
         this.shapeConfigs.push({ ...this.circleShape })
-        this.circleShape.visible = false
+        this.circleShape = {...this.circleShape, visible : false}
         break;
       case "ellipse":
         this.shapeConfigs.push({ ...this.ellipseShape })
-        this.ellipseShape.visible = false
+        this.ellipseShape = {...this.ellipseShape, visible : false}
         break;
       case "triangle":
         this.shapeConfigs.push({ ...this.triangleShape })
-        this.triangleShape.visible = false
+        this.triangleShape = {...this.triangleShape, visible : false}
         break;
     }
 
@@ -360,14 +366,14 @@ export class Canvas {
     this.currentToolChange.emit(this.currentTool)
 
     const lastIndex : number = this.shapeConfigs.length - 1;
-    this.shapeServie.draw(this.shapedto.transform(this.shapeConfigs[lastIndex])).subscribe({
-      next: (shape) => {
-        console.log('User created:', shape);
-      },
-      error: (error) => {
-        console.error('Error creating user:', error);
-      }
-    })
+    // this.shapeServie.draw(this.shapedto.transform(this.shapeConfigs[lastIndex])).subscribe({
+    //   next: (shape) => {
+    //     console.log('User created:', shape);
+    //   },
+    //   error: (error) => {
+    //     console.error('Error creating user:', error);
+    //   }
+    // })
   }
 
   public select(event: NgKonvaEventObject<MouseEvent>) {

@@ -33,20 +33,10 @@ export class ColorPanel {
    }
    isActive(color: string) :boolean {
     if(this.currentMode==='fill'){
-      if(this.currentFillColor===color){
-        return true;
-      }
-      else {
-        return false;
-      }
+      return (this.currentFillColor===color)
     }
     else{
-      if(this.currentStrokeColor==color){
-        return true;
-      }
-      else{
-        return false;
-      }
+      return (this.currentStrokeColor===color)
     }
 
    }

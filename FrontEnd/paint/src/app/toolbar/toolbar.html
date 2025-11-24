@@ -1,54 +1,90 @@
 <aside class="toolbar-container">
     <!-- Line -->
-    <div class="tool-item" title="line" appShapeSelect (toolselect)="emitToParent($event)">
+    <div class="tool-item" 
+         [class.selected]="isSelected('line')"
+         title="line" 
+         appShapeSelect 
+         (toolselect)="emitToParent($event)">
         <div class="icon line-shape"></div>
         <div class="label">Line</div>
     </div>
 
     <!-- Square -->
-    <div class="tool-item" title="square" appShapeSelect (toolselect)="emitToParent($event)">
+    <div class="tool-item" 
+         [class.selected]="isSelected('square')"
+         title="square" 
+         appShapeSelect 
+         (toolselect)="emitToParent($event)">
         <div class="icon square"></div>
         <div class="label">Square</div>
     </div>
 
     <!-- Rectangle -->
-    <div class="tool-item" title="rectangle" appShapeSelect (toolselect)="emitToParent($event)">
+    <div class="tool-item" 
+         [class.selected]="isSelected('rectangle')"
+         title="rectangle" 
+         appShapeSelect 
+         (toolselect)="emitToParent($event)">
         <div class="icon rectangle"></div>
         <div class="label">Rectangle</div>
     </div>
 
     <!-- Circle -->
-    <div class="tool-item" title="circle" appShapeSelect (toolselect)="emitToParent($event)">
+    <div class="tool-item" 
+         [class.selected]="isSelected('circle')"
+         title="circle" 
+         appShapeSelect 
+         (toolselect)="emitToParent($event)">
         <div class="icon circle"></div>
         <div class="label">Circle</div>
     </div>
 
     <!-- Ellipse -->
-    <div class="tool-item" title="ellipse" appShapeSelect (toolselect)="emitToParent($event)">
+    <div class="tool-item" 
+         [class.selected]="isSelected('ellipse')"
+         title="ellipse" 
+         appShapeSelect 
+         (toolselect)="emitToParent($event)">
         <div class="icon oval"></div>
         <div class="label">Ellipse</div>
     </div>
 
     <!-- Triangle -->
-    <div class="tool-item" title="triangle" appShapeSelect (toolselect)="emitToParent($event)">
+    <div class="tool-item" 
+         [class.selected]="isSelected('triangle')"
+         title="triangle" 
+         appShapeSelect 
+         (toolselect)="emitToParent($event)">
         <div class="icon triangle"></div>
         <div class="label">Triangle</div>
     </div>
 
     <!-- Diamond -->
-    <div class="tool-item" title="diamond" appShapeSelect (toolselect)="emitToParent($event)">
+    <div class="tool-item" 
+         [class.selected]="isSelected('diamond')"
+         title="diamond" 
+         appShapeSelect 
+         (toolselect)="emitToParent($event)">
         <div class="icon diamond"></div>
         <div class="label">Diamond</div>
     </div>
 
     <!-- Pentagon -->
-    <div class="tool-item" title="pentagon" appShapeSelect (toolselect)="emitToParent($event)">
+    <div class="tool-item" 
+         [class.selected]="isSelected('pentagon')"
+         title="pentagon" 
+         appShapeSelect 
+         (toolselect)="emitToParent($event)">
         <div class="icon pentagon"></div>
         <div class="label">Pentagon</div>
     </div>
 
     <!-- Hexagon -->
-    <div class="tool-item" title="hexagon" appShapeSelect (toolselect)="emitToParent($event)">
+    <div class="tool-item" 
+         [class.selected]="isSelected('hexagon')"
+         title="hexagon" 
+         appShapeSelect 
+         (toolselect)="emitToParent($event)">
         <div class="icon hexagon"></div>
         <div class="label">Hexagon</div>
     </div>
