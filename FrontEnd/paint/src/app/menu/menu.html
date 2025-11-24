@@ -12,19 +12,21 @@
 
     <div class="history-actions">
         <!-- Copy Button -->
-        <div class="history-btn" title="Copy">
-          <span class="arrow-icon copy-icon">⧉</span>
-          <span class="action-label">copy</span>
+        <div class="history-btn" title="Copy" [class.selected]="isSelected('copy')" (click)="emitToParent('copy')">
+            <span class="arrow-icon copy-icon">⧉</span>
+            <span class="action-label">copy</span>
         </div>
 
         <!-- Undo Button -->
-        <div class="history-btn" title="Undo">
+        <div class="history-btn" title="Undo" [class.flash]="flashUndo" (click)="triggerFlash('undo')"
+            (animationend)="onFlashEnd()">
             <span class="arrow-icon undo-icon">↶</span>
             <span class="action-label">undo</span>
         </div>
 
         <!-- Redo Button -->
-        <div class="history-btn" title="Redo">
+        <div class="history-btn" title="Redo" [class.flash]="flashRedo" (click)="triggerFlash('redo')"
+            (animationend)="onFlashEnd()">
             <span class="arrow-icon redo-icon">↷</span>
             <span class="action-label">redo</span>
         </div>

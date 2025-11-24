@@ -4,7 +4,7 @@
 
   <!-- Center Column -->
   <div class="center-area">
-    <app-menu></app-menu>
+    <app-menu (appToolChange)="appSelectedTool = $event" [menuSelectedTool]="appSelectedTool"></app-menu>
     <app-canvas [currentTool]="appSelectedTool" (currentToolChange)="appSelectedTool = $event"></app-canvas>
   </div>
 

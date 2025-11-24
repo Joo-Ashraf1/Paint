@@ -4,7 +4,7 @@
 }
 
 .menu-bar {
-    height: 60px;
+    height: 75px;
     background-color: #fff;
     border-bottom: 3px solid #000;
     display: flex;
@@ -49,11 +49,71 @@
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    transition: transform 0.1s;
+    transition: all 0.3s ease; /* Updated to match toolbar transition */
+    padding: 5px 10px;         /* Added padding so the glow doesn't look cramped */
+    border-radius: 8px;        /* Needed for the background styling */
+    position: relative;        /* Needed for the glow effect */
 }
+
+.flash {
+  animation: flashPulse 180ms ease-out;
+}
+
+@keyframes flashPulse {
+  0%   { transform: scale(1);   box-shadow: 0 0 0 rgba(255,255,255,0); }
+  50%  { transform: scale(1.15); box-shadow: 0 0 12px rgba(255,255,255,0.6); }
+  100% { transform: scale(1);   box-shadow: 0 0 0 rgba(255,255,255,0); }
+}
+
 
 .history-btn:hover {
     transform: scale(1.1);
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.history-btn.selected {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    animation: pulse 0.6s ease-out;
+}
+
+/* Make text white when selected */
+.history-btn.selected .action-label,
+.history-btn.selected .arrow-icon {
+    color: white;
+    font-weight: bold;
+}
+
+/* The Glow Effect */
+.history-btn.selected::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    z-index: -1;
+    opacity: 0.5;
+    filter: blur(8px);
+}
+
+/* Pulse Animation Keyframes */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(102, 126, 234, 0.7);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+    }
+    100% {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
 }
 
 .arrow-icon {
@@ -74,3 +134,4 @@
     font-size: 16px;
     color: #333;
 }
+
