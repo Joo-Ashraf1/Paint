@@ -1,13 +1,16 @@
 package com.PaintBackEnd.BackEnd.Memory;
 
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 
 import com.PaintBackEnd.BackEnd.Shapes.Shape;
 import com.PaintBackEnd.BackEnd.Shapes.ShapeDTO;
 import com.PaintBackEnd.BackEnd.Shapes.ShapeMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 
 public class Memory {
 
@@ -15,13 +18,12 @@ public class Memory {
 
     private ShapeMapper shapeMapper = new ShapeMapper() ;
 
-    private HashMap<Integer, Shape> memoryShapes = new HashMap<>();
+    private LinkedHashMap<Integer, Shape> memoryShapes = new LinkedHashMap<>();
     private static int idCounter = 0;
 
+    // Singleton
     private Memory() {
     }
-
-    // Singleton
     public static synchronized Memory getInstance() {
         if (memory == null)
             memory = new Memory();
@@ -76,4 +78,13 @@ public class Memory {
         memoryShapes.clear();
         idCounter = 0;
     }
+
+    public ShapeDTO lastDTOAdded(){
+        Shape lastValue = null;
+        for (Map.Entry<Integer, Shape> entry : memoryShapes.entrySet()) {
+            lastValue = entry.getValue();
+        }
+        return shapeMapper.toDto(lastValue);
+    }
+
 }

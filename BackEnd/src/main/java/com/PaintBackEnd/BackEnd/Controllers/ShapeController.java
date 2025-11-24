@@ -19,8 +19,10 @@ public class ShapeController {
     private final Memory mem = Memory.getInstance();
 
     @PostMapping("/draw")
-    public void draw(@RequestBody ShapeDTO dto){
+    public ShapeDTO draw(@RequestBody ShapeDTO dto){
         paintsrv.draw(dto);
+        return mem.lastDTOAdded() ;
+
     }
 
     @GetMapping("/undo")
@@ -42,13 +44,13 @@ public class ShapeController {
 
     @DeleteMapping("/delete")
     public void delete(@RequestBody ShapeDTO shapeDTO){
-
         paintsrv.delete(shapeDTO);
     }
 
     @PostMapping("/copy")
-    public void Copy(@RequestBody ShapeDTO shapeDTO) {
-        paintsrv.copy(shapeDTO);
+    public ShapeDTO Copy(@RequestBody ShapeDTO shapeDTO) {
+       paintsrv.copy(shapeDTO);
+       return mem.lastDTOAdded();
     }
 
 

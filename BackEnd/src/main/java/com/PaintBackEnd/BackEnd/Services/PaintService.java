@@ -50,9 +50,5 @@ public class PaintService {
         commandManager.redo();
     }
 
-    public void save(){
-
-    }
-
 
 }
