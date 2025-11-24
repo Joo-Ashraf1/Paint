@@ -10,7 +10,9 @@ import type { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon'
 import type { TextConfig } from 'konva/lib/shapes/Text'
 import type { TransformerConfig } from 'konva/lib/shapes/Transformer'
 import Konva from 'konva'
-import { KonvaEventObject } from 'konva/lib/Node'
+import { ShapeService } from '../services/shape';
+import { ShapeDTO } from '../models/shapedto';
+import { ShapeDtoPipe } from '../pipes/shape-dto-pipe';
 
 import {
   CoreShapeComponent,
@@ -19,17 +21,21 @@ import {
   StageComponent,
 } from 'ng2-konva'
 import { SideToRadiusPipe } from '../pipes/side-to-radius-pipe'
-import { NodeConfig } from 'konva/lib/Node'
 
 @Component({
   selector: 'app-canvas',
   imports: [StageComponent, CoreShapeComponent],
   templateUrl: './canvas.html',
   styleUrl: './canvas.css',
-  providers: [SideToRadiusPipe]
+  providers: [SideToRadiusPipe, ShapeDtoPipe]
 })
 export class Canvas {
-  constructor(private sidetoradiuspipe : SideToRadiusPipe) {}
+  constructor(
+    private sidetoradiuspipe : SideToRadiusPipe,
+    private shapeServie : ShapeService,
+    private shapedto : ShapeDtoPipe
+  ) {}
+
   @ViewChild('transformer') transformer!: KonvaComponent
   @ViewChild('transReg') transReg! : KonvaComponent
   @ViewChild('rectRef') rectRef!: KonvaComponent
@@ -65,21 +71,7 @@ export class Canvas {
     }
   }
 
-  public rect1 : RectConfig = {
-    x : 100,
-    y : 100,
-    fill : "red",
-    stroke : "black",
-    type : "rectangle",
-    strokeWidth : 4,
-    height : 100,
-    width : 200,
-    draggable : true,
-    dragBoundFunc : limitToStage,
-    visible : true
-  }
-
-  shapeConfigs : ShapeConfig[] = [this.rect1]
+  shapeConfigs : ShapeConfig[] = []
 
   public rubber_band : RectConfig = {
     x : this.x_start,
@@ -288,6 +280,16 @@ export class Canvas {
 
     this.currentTool = 'select'
     this.currentToolChange.emit(this.currentTool)
+
+    const lastIndex : number = this.shapeConfigs.length - 1;
+    this.shapeServie.draw(this.shapedto.transform(this.shapeConfigs[lastIndex])).subscribe({
+      next: (shape) => {
+        console.log('User created:', shape);
+      },
+      error: (error) => {
+        console.error('Error creating user:', error);
+      }
+    })
   }
 
   public select(event : NgKonvaEventObject<MouseEvent>) {
@@ -295,14 +297,18 @@ export class Canvas {
     console.log(shapeNode)
     // const node = ref.getNode()
     let tr : Konva.Transformer
+    let other_tr : Konva.Transformer
     if (shapeNode.attrs['type'] === 'square' || shapeNode.attrs['type'] === 'circle') {
       tr = this.transReg.getStage() as Konva.Transformer
+      other_tr = this.transformer.getStage() as Konva.Transformer
     }
     else {
       tr = this.transformer.getStage() as Konva.Transformer
+      other_tr = this.transReg.getStage() as Konva.Transformer
     }
 
     tr.nodes([shapeNode])
+    other_tr.nodes([])
     // tr.getLayer()?.batchDraw()
   }
 
