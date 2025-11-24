@@ -94,6 +94,7 @@ export class ColorPanel {
   }
 
   onStrokeWidthChange(event: any) {
+    event.target.value = Number(event.target.value)
      if(Number(event.target.value)>this.maxStrokeWidth){
        event.target.value=this.maxStrokeWidth;
      }

@@ -3,7 +3,6 @@ import { ShapeDTO } from '../models/shapedto';
 import { ShapeConfig } from 'konva/lib/Shape';
 import { LineConfig } from 'konva/lib/shapes/Line';
 import { RectConfig } from 'konva/lib/shapes/Rect';
-import { Rect } from 'fabric';
 import { CircleConfig } from 'konva/lib/shapes/Circle';
 import { EllipseConfig } from 'konva/lib/shapes/Ellipse';
 import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';

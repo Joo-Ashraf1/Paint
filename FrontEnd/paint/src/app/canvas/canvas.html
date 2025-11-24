@@ -5,11 +5,12 @@
             (mouseup)="handleStageMouseUp()">
             <ko-layer class="canvas">
 
-                <!-- <ko-text [config]="mousePosText"></ko-text> -->
-                <!-- <ko-text [config]="ShapePosText"></ko-text> -->
-
-                <ko-rect [config]="rubber_band"></ko-rect>
-                <ko-line [config]="line_rubber_band"></ko-line>
+                <ko-line [config]="lineShape"></ko-line>
+                <ko-rect [config]="squareShape"></ko-rect>
+                <ko-rect [config]="rectangleShape"></ko-rect>
+                <ko-circle [config]="circleShape"></ko-circle>
+                <ko-ellipse [config]="ellipseShape"></ko-ellipse>
+                <ko-regular-polygon [config]="triangleShape"></ko-regular-polygon>
 
                 @for (shapeConfig of shapeConfigs; track $index) {
                 @if (shapeConfig['type'] === 'circle') {

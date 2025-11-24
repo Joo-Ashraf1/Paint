@@ -22,8 +22,8 @@ import {
 } from 'ng2-konva'
 import { SideToRadiusPipe } from '../pipes/side-to-radius-pipe'
 import { NodeConfig } from 'konva/lib/Node'
-import {ColorToCanvas} from '../color-to-canvas';
-import {Subscription} from 'rxjs';
+import { ColorToCanvas } from '../color-to-canvas';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-canvas',
@@ -34,33 +34,100 @@ import {Subscription} from 'rxjs';
 })
 export class Canvas {
   constructor(
-    private sidetoradiuspipe : SideToRadiusPipe,
-    private shapeServie : ShapeService,
-    private shapedto : ShapeDtoPipe,
-    private service : ColorToCanvas
-  ) {}
-  
+    private sidetoradiuspipe: SideToRadiusPipe,
+    private shapeServie: ShapeService,
+    private shapedto: ShapeDtoPipe,
+    private service: ColorToCanvas
+  ) { }
+
   @ViewChild('transformer') transformer!: KonvaComponent
-  @ViewChild('transReg') transReg! : KonvaComponent
+  @ViewChild('transReg') transReg!: KonvaComponent
   @ViewChild('rectRef') rectRef!: KonvaComponent
   @ViewChild('circleRef') circleRef!: KonvaComponent
-  @ViewChild('ellipseRef') ellipseRef! : KonvaComponent
-  @ViewChild('regularPolygonRef') regularPolygonRef! : KonvaComponent
-  @ViewChild('selectionButtons') selectionButtons! : KonvaComponent
-  @ViewChild("canvas_wrap_ref") canvas_wrap_element : any
-  @ViewChild('stageRef') stageRef! : KonvaComponent;
+  @ViewChild('ellipseRef') ellipseRef!: KonvaComponent
+  @ViewChild('regularPolygonRef') regularPolygonRef!: KonvaComponent
+  @ViewChild('selectionButtons') selectionButtons!: KonvaComponent
+  @ViewChild("canvas_wrap_ref") canvas_wrap_element: any
+  @ViewChild('stageRef') stageRef!: KonvaComponent;
   @Input("currentTool") currentTool = 'select'
   @Output("currentToolChange") currentToolChange = new EventEmitter<string>()
   currentFillColor = "white"
   currentStrokeColor = "black"
   currentStrokeWidth = 3
-  private subs=new Subscription();
-  isDrawing : boolean = false
-  x_start : number = 0
-  y_start : number = 0
-  x_end : number = 0
-  y_end : number = 0
-  ngOnInit () {
+  
+  lineShape: LineConfig = {
+    points: [],
+    visible: false,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    type : "line"
+  }
+  squareShape: RectConfig = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    visible: false,
+    fill: this.currentFillColor,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    type : "square"
+    
+  };
+  rectangleShape: RectConfig = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    visible: false,
+    fill: this.currentFillColor,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    type : "rectangle"
+
+  };
+  circleShape: CircleConfig = {
+    x: 0,
+    y: 0,
+    radius: 0,
+    visible: false,
+    fill: this.currentFillColor,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    type : "circle"
+  };
+  ellipseShape: EllipseConfig = {
+    x: 0,
+    y: 0,
+    radiusX: 0,
+    radiusY: 0,
+    visible: false,
+    fill: this.currentFillColor,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    type : "ellipse"
+  };
+  triangleShape: RegularPolygonConfig = {
+    x: 0,
+    y: 0,
+    sides: 3,
+    radius: 0,
+    visible: false,
+    fill: this.currentFillColor,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    type : "triangle"
+  };
+
+
+  private subs = new Subscription();
+  isDrawing: boolean = false
+  x_start: number = 0
+  y_start: number = 0
+  x_end: number = 0
+  y_end: number = 0
+
+  ngOnInit() {
     this.subs.add(this.service.strokeColor$.subscribe(c => {
       this.currentStrokeColor = c;
     }));
@@ -80,32 +147,16 @@ export class Canvas {
     const rect = this.canvas_wrap_element.nativeElement.getBoundingClientRect()
 
     this.configStage = {
-      width : rect.width,
-      height : rect.height
+      width: rect.width,
+      height: rect.height
     }
   }
 
-  shapeConfigs : ShapeConfig[] = []
-
-  public rubber_band : RectConfig = {
-    x : this.x_start,
-    y : this.y_start,
-    width : 0,
-    height : 0,
-    opacity : 0.25,
-    fill : "#03dffc",
-    stroke: "#27517a",
-    strokeWidth : 2,
-    visible : false
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
-  public line_rubber_band : LineConfig = {
-    points : [this.x_start, this.y_start],
-    opacity : 0.25,
-    stroke : "#27517a",
-    strokeWidth : 1,
-    visible : false
-  }
+  shapeConfigs: ShapeConfig[] = []
 
   public trans_all: TransformerConfig = {
     rotateEnabled: false,
@@ -136,20 +187,72 @@ export class Canvas {
     this.x_start = position?.x ?? 0
     this.y_start = position?.y ?? 0
 
-
-    if (this.currentTool !== "line")
-      this.rubber_band = {
-        ...this.rubber_band,
-        x : this.x_start,
-        y : this.y_start,
-        visible : true
-      }
-    else if (this.currentTool === "line")
-      this.line_rubber_band = {
-        ...this.line_rubber_band,
-        points : [this.x_start, this.y_start],
-        visible : true
-      }
+    switch (this.currentTool) {
+      case "line":
+        this.lineShape = {
+          ...this.lineShape,
+          points : [this.x_start, this.y_start],
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+      case "square":
+        this.squareShape = {
+          ...this.squareShape,
+          x : this.x_start,
+          y : this.y_start,
+          fill : this.currentFillColor,
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+      case "rectangle":
+        this.rectangleShape = {
+          ...this.rectangleShape,
+          x : this.x_start,
+          y : this.y_start,
+          fill : this.currentFillColor,
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+      case "circle":
+        this.circleShape = {
+          ...this.circleShape,
+          x : this.x_start,
+          y : this.y_start,
+          fill : this.currentFillColor,
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+      case "ellipse":
+        this.ellipseShape = {
+          ...this.ellipseShape,
+          x : this.x_start,
+          y : this.y_start,
+          fill : this.currentFillColor,
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+      case "triangle":
+        this.triangleShape = {
+          ...this.triangleShape,
+          x : this.x_start,
+          y : this.y_start,
+          fill : this.currentFillColor,
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+    }
   }
 
   handleStageMouseMove() {
@@ -162,134 +265,95 @@ export class Canvas {
     this.x_end = position?.x ?? 0
     this.y_end = position?.y ?? 0
 
-    if (this.currentTool !== "line")
-      this.rubber_band = {
-        ...this.rubber_band,
-        x : Math.min(this.x_start, this.x_end),
-        y : Math.min(this.y_start, this.y_end),
-        width : Math.abs(this.x_end - this.x_start),
-        height : Math.abs(this.y_end - this.y_start)
-      }
-    else if (this.currentTool === "line")
-      this.line_rubber_band = {
-        ...this.line_rubber_band,
-        points : [
-          this.x_start, this.y_start,
-          this.x_end, this.y_end
-        ]
-      }
+    const width = Math.abs(this.x_end - this.x_start)
+    const height = Math.abs(this.y_end - this.y_start)
+    const x_center = (this.x_start + this.x_end) / 2
+    const y_center = (this.y_start + this.y_end) / 2
+    switch (this.currentTool) {
+      case "line":
+        this.lineShape = {
+          ...this.lineShape,
+          points: [
+            this.x_start, this.y_start,
+            this.x_end, this.y_end
+          ]
+        }
+        break;
+      case "square":
+        this.squareShape = {
+          ...this.squareShape,
+          x: Math.min(this.x_start, this.x_end),
+          y: Math.min(this.y_start, this.y_end),
+          width: Math.min(width, height),
+          height: Math.min(width, height)
+        }
+        break;
+      case "rectangle":
+        this.rectangleShape = {
+          ...this.rectangleShape,
+          x: Math.min(this.x_start, this.x_end),
+          y: Math.min(this.y_start, this.y_end),
+          width: width,
+          height: height
+        }
+        break;
+      case "circle":
+        this.circleShape = {
+          ...this.circleShape,
+          x: x_center,
+          y: y_center,
+          radius: Math.min(width, height) / 2
+        }
+        break;
+      case "ellipse":
+        this.ellipseShape = {
+          ...this.ellipseShape,
+          x: x_center,
+          y: y_center,
+          radiusX: width / 2,
+          radiusY: height / 2
+        }
+        break;
+      case "triangle":
+        const side = Math.min(width, height)
+        this.triangleShape = {
+          ...this.triangleShape,
+          x: x_center,
+          y: y_center,
+          radius: this.sidetoradiuspipe.transform(side, 3)
+        }
+        break;
+    }
   }
 
   handleStageMouseUp() {
     this.isDrawing = false
 
-    const height = (this.rubber_band.height) ? this.rubber_band.height : 0
-    const width = (this.rubber_band.width) ? this.rubber_band.width : 0
-
-    this.rubber_band = {
-      ...this.rubber_band,
-      height : 0,
-      width : 0,
-      visible : false
-    }
-
-    this.line_rubber_band = {
-      ...this.line_rubber_band,
-      points : [],
-      visible : false
-    }
-
-    if (this.currentTool === "line") {
-      const line : LineConfig = {
-        points : [
-          this.x_start, this.y_start,
-          this.x_end, this.y_end
-        ],
-        stroke : this.currentStrokeColor,
-        strokeWidth : this.currentStrokeWidth,
-        draggable : true,
-        dragBoundFunc : limitToStage,
-        type : "line"
-      }
-      this.shapeConfigs.push(line);
-    }
-    else if (this.currentTool === "square") {
-      const side = Math.min(height, width)
-      const square : RectConfig = {
-        x : Math.min(this.x_start, this.x_end),
-        y : Math.min(this.y_start, this.y_end),
-        height : side,
-        width : side,
-        fill : this.currentFillColor,
-        stroke : this.currentStrokeColor,
-        strokeWidth : this.currentStrokeWidth,
-        draggable : true,
-        dragBoundFunc : limitToStage,
-        type : "square"
-      }
-      this.shapeConfigs.push(square);
-    }
-    else if (this.currentTool === "rectangle") {
-
-      const rectangle : RectConfig = {
-        x : Math.min(this.x_start, this.x_end),
-        y : Math.min(this.y_start, this.y_end),
-        height : height,
-        width : width,
-        fill : this.currentFillColor,
-        stroke : this.currentStrokeColor,
-        strokeWidth : this.currentStrokeWidth,
-        draggable : true,
-        dragBoundFunc : limitToStage,
-        type : "rectangle"
-      }
-      this.shapeConfigs.push(rectangle);
-    }
-    else if (this.currentTool === "circle") {
-      const radius = Math.min(height, width) / 2
-      const circle : CircleConfig = {
-        x : Math.abs(this.x_end + this.x_start) / 2,
-        y : Math.abs(this.y_end + this.y_start) / 2,
-        radius : radius,
-        fill : this.currentFillColor,
-        stroke : this.currentStrokeColor,
-        strokeWidth : this.currentStrokeWidth,
-        draggable : true,
-        dragBoundFunc : limitToStage,
-        type : "circle"
-      }
-      this.shapeConfigs.push(circle);
-    }
-    else if (this.currentTool === "ellipse") {
-      const ellipse : EllipseConfig = {
-        x : Math.abs(this.x_end + this.x_start) / 2,
-        y : Math.abs(this.y_end + this.y_start) / 2,
-        radiusY : height / 2,
-        radiusX : width / 2,
-        fill : this.currentFillColor,
-        stroke : this.currentStrokeColor,
-        strokeWidth : this.currentStrokeWidth,
-        draggable : true,
-        dragBoundFunc : limitToStage,
-        type : "ellipse"
-      }
-      this.shapeConfigs.push(ellipse);
-    }
-    else if (this.currentTool === "triangle") {
-      const side = Math.min(height, width)
-      const triangle : RegularPolygonConfig = {
-        x : Math.abs(this.x_end + this.x_start) / 2,
-        y : Math.abs(this.y_end + this.y_start) / 2,
-        sides : 3,
-        radius : this.sidetoradiuspipe.transform(side, 3),
-        fill : this.currentFillColor,
-        stroke : this.currentStrokeColor,
-        strokeWidth : this.currentStrokeWidth,
-        draggable : true,
-        dragBoundFunc : limitToStage,
-        type : "triangle"
-      }
-      this.shapeConfigs.push(triangle)
+    switch (this.currentTool) {
+      case "line":
+        this.shapeConfigs.push({ ...this.lineShape })
+        this.lineShape.visible = false
+        break;
+      case "square":
+        this.shapeConfigs.push({ ...this.squareShape })
+        this.squareShape.visible = false
+        break;
+      case "rectangle":
+        this.shapeConfigs.push({ ...this.rectangleShape })
+        this.rectangleShape.visible = false
+        break;
+      case "circle":
+        this.shapeConfigs.push({ ...this.circleShape })
+        this.circleShape.visible = false
+        break;
+      case "ellipse":
+        this.shapeConfigs.push({ ...this.ellipseShape })
+        this.ellipseShape.visible = false
+        break;
+      case "triangle":
+        this.shapeConfigs.push({ ...this.triangleShape })
+        this.triangleShape.visible = false
+        break;
     }
 
     this.currentTool = 'select'
@@ -306,12 +370,12 @@ export class Canvas {
     })
   }
 
-  public select(event : NgKonvaEventObject<MouseEvent>) {
+  public select(event: NgKonvaEventObject<MouseEvent>) {
     const shapeNode = event.event.target as Konva.Node
     console.log(shapeNode)
     // const node = ref.getNode()
-    let tr : Konva.Transformer
-    let other_tr : Konva.Transformer
+    let tr: Konva.Transformer
+    let other_tr: Konva.Transformer
     if (shapeNode.attrs['type'] === 'square' || shapeNode.attrs['type'] === 'circle') {
       tr = this.transReg.getStage() as Konva.Transformer
       other_tr = this.transformer.getStage() as Konva.Transformer
@@ -326,7 +390,7 @@ export class Canvas {
     // tr.getLayer()?.batchDraw()
   }
 
-  public checkDeselect(event : NgKonvaEventObject<MouseEvent>) {
+  public checkDeselect(event: NgKonvaEventObject<MouseEvent>) {
     // If we clicked on the stage (empty area), deselect
     const clickedNode = event.event.target
     const stage = this.stageRef.getStage()
@@ -342,7 +406,7 @@ export class Canvas {
     }
   }
 
-  handleTransformEnd(event : NgKonvaEventObject<MouseEvent>, index : number) {
+  handleTransformEnd(event: NgKonvaEventObject<MouseEvent>, index: number) {
     const node = event.event.target
     this.shapeConfigs[index] = {
       ...this.shapeConfigs[index],
@@ -352,14 +416,14 @@ export class Canvas {
       height: node.height() * node.scaleY(),
       scaleX: 1,
       scaleY: 1,
-      rotation : node.rotation()
+      rotation: node.rotation()
     }
     node.scaleX(1)
     node.scaleY(1)
   }
 
-  handleDragEnd(event : NgKonvaEventObject<MouseEvent>, index : number) {
-     const node = event.event.target
+  handleDragEnd(event: NgKonvaEventObject<MouseEvent>, index: number) {
+    const node = event.event.target
     this.shapeConfigs[index] = {
       ...this.shapeConfigs[index],
       x: node.x(),
@@ -367,12 +431,12 @@ export class Canvas {
     }
   }
 
-  public getRadius(sideLength : number, sides_number : number) : number {
+  public getRadius(sideLength: number, sides_number: number): number {
     const radius = sideLength / (2 * Math.sin(Math.PI / sides_number))
     return radius
   }
 
-  public handleMouseMove(event: any, object : any): void {
+  public handleMouseMove(event: any, object: any): void {
     // const mousePos = event.target.getStage().getPointerPosition()
     // const x = mousePos.x - object['x']
     // const y = mousePos.y - object['y']
@@ -383,25 +447,25 @@ export class Canvas {
     // this.mousePosText = { ...this.mousePosText, text: 'Mouse out of ellipse' }
   }
 
-  public handleMouseOver(event : NgKonvaEventObject<MouseEvent>) {
+  public handleMouseOver(event: NgKonvaEventObject<MouseEvent>) {
     const stage = event.event.target.getStage()
     if (stage)
       stage.container().style.cursor = 'pointer'
   }
 
-  public handeMouseUp(event : NgKonvaEventObject<MouseEvent>) {
+  public handeMouseUp(event: NgKonvaEventObject<MouseEvent>) {
     const stage = event.event.target.getStage()
     if (stage)
-    stage.container().style.cursor = 'pointer'
+      stage.container().style.cursor = 'pointer'
   }
 
-  public handleMouseLeave(event : NgKonvaEventObject<MouseEvent>) {
+  public handleMouseLeave(event: NgKonvaEventObject<MouseEvent>) {
     const stage = event.event.target.getStage()
     if (stage)
       stage.container().style.cursor = 'default'
   }
 
-  public handleDragMove(event : NgKonvaEventObject<MouseEvent>, shapeIndex : number) {
+  public handleDragMove(event: NgKonvaEventObject<MouseEvent>, shapeIndex: number) {
     const stage = event.event.target.getStage()
     if (stage)
       stage.container().style.cursor = 'move'
