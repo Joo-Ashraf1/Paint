@@ -1,11 +1,11 @@
 <main class="main-layout">
   <!-- Left Sidebar -->
-  <app-toolbar></app-toolbar>
+  <app-toolbar (appToolChange)="appSelectedTool = $event" [toolbarSelectedTool]="appSelectedTool"></app-toolbar>
 
   <!-- Center Column -->
   <div class="center-area">
     <app-menu></app-menu>
-    <app-canvas></app-canvas>
+    <app-canvas [currentTool]="appSelectedTool" (currentToolChange)="appSelectedTool = $event"></app-canvas>
   </div>
 
   <!-- Right Sidebar -->

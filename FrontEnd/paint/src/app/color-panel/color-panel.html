@@ -1,49 +1,66 @@
 <aside class="colors-container">
-    <h2 class="header">Colors</h2>
+     <h2 class="header">Colors</h2>
 
-    <!-- Fill / Stroke Toggle (Radio Button Hack for pure CSS interactivity) -->
-    <div class="mode-toggle">
-        <input type="radio" name="drawMode" id="modeFill" class="mode-radio" checked>
-        <label for="modeFill" class="mode-option top-option">
-            <span class="mode-label">fill</span>
-        </label>
+     <!-- Fill / Stroke Toggle (Radio Button Hack for pure CSS interactivity) -->
+     <div class="mode-toggle">
+          <input type="radio" name="drawMode" id="modeFill" class="mode-radio" checked [(ngModel)]="currentMode"
+               value="fill">
+          <label for="modeFill" class="mode-option top-option">
+               <span class="mode-label">fill</span>
+          </label>
 
-        <input type="radio" name="drawMode" id="modeStroke" class="mode-radio">
-        <label for="modeStroke" class="mode-option bottom-option">
-            <span class="mode-label">stroke</span>
-        </label>
-    </div>
+          <input type="radio" name="drawMode" id="modeStroke" class="mode-radio" [(ngModel)]="currentMode"
+               value="stroke">
+          <label for="modeStroke" class="mode-option bottom-option">
+               <span class="mode-label">stroke</span>
+          </label>
+     </div>
 
-    <!-- Color Grid -->
-    <div class="grid">
-        <div class="swatch red"></div>
-        <div class="swatch orange"></div>
-        <div class="swatch yellow"></div>
-        <div class="swatch green"></div>
-        <div class="swatch cyan"></div>
-        <div class="swatch blue"></div>
-        <div class="swatch purple"></div>
-        <div class="swatch pink"></div>
-        <div class="swatch brown"></div>
-        <div class="swatch black"></div>
-        <div class="swatch gray"></div>
-        <div class="swatch white"></div>
-    </div>
+     <!-- Color Grid -->
+     <div class="grid">
+          <div class="swatch red" [class.selected]="isActive('#ff0000')" (click)="selectColor('#ff0000')"></div>
+          <div class="swatch orange" [class.selected]="isActive('#ffa500')" (click)="selectColor('#ffa500')"></div>
+          <div class="swatch yellow" [class.selected]="isActive('#ffff00')" (click)="selectColor('#ffff00')"></div>
+          <div class="swatch green" [class.selected]="isActive('#008000')" (click)="selectColor('#008000')"></div>
+          <div class="swatch cyan" [class.selected]="isActive('#00ffff')" (click)="selectColor('#00ffff')"></div>
+          <div class="swatch blue" [class.selected]="isActive('#0000ff')" (click)="selectColor('#0000ff')"></div>
+          <div class="swatch purple" [class.selected]="isActive('#800080')" (click)="selectColor('#800080')"></div>
+          <div class="swatch pink" [class.selected]="isActive('#ffc0cb')" (click)="selectColor('#ffc0cb')"></div>
+          <div class="swatch brown" [class.selected]="isActive('#a52a2a')" (click)="selectColor('#a52a2a')"></div>
+          <div class="swatch black" [class.selected]="isActive('#000000')" (click)="selectColor('#000000')"></div>
+          <div class="swatch gray" [class.selected]="isActive('#808080')" (click)="selectColor('#808080')"></div>
+          <div class="swatch white" [class.selected]="isActive('#ffffff')" (click)="selectColor('#ffffff')"></div>
+     </div>
 
-    <div class="separator"></div>
+     <div class="separator"></div>
 
-    <!-- Stroke Width Input (Moved Above Eraser) -->
-    <div class="stroke-width-container">
-        <label for="strokeWidth">strokeWidth :</label>
-        <input type="number" id="strokeWidth" value="3" min="1" max="50">
-    </div>
+     <!-- Hex Code Picker (NEW) -->
+     <div class="hex-picker-container">
+          <label class="hex-label" for="hexInput">Hex Code:</label>
+          <div class="picker-row">
+               <input type="color" id="colorPicker" [value]="getCurrentColor()"
+                      (input)="onHexPick($event)" value="#000000" class="color-input" >
+               <input type="text" id="hexInput" [value]="getCurrentColor()"
+                      (input)="onHexText($event)" value="#000000" maxlength="7" class="hex-text-input">
+          </div>
+     </div>
 
-    <div class="separator"></div>
+     <div class="separator"></div>
 
-    <!-- Eraser -->
-    <div class="eraser-container" title="Eraser">
-        <div class="real-eraser"></div>
-        <div class="eraser-label">Eraser</div>
-    </div>
+
+     <!-- Stroke Width Input (Moved Above Eraser) -->
+     <div class="stroke-width-container">
+          <label for="strokeWidth">strokeWidth :</label>
+          <input type="number" [value]="currentStrokeWidth"
+                 (input)="onStrokeWidthChange($event)" id="strokeWidth" value="3" [min]="minStrokeWidth" [max]="maxStrokeWidth">
+     </div>
+
+     <div class="separator"></div>
+
+     <!-- Eraser -->
+     <div class="eraser-container" title="Eraser">
+          <div class="real-eraser"></div>
+          <div class="eraser-label">Eraser</div>
+     </div>
 
 </aside>

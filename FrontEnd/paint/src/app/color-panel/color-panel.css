@@ -1,6 +1,10 @@
 :host {
     display: block;
+    width: 150px;
+    /* Slightly widened for hex input */
     height: 100%;
+    flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .colors-container {
@@ -12,6 +16,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;
+    overflow-y: auto;
 }
 
 .header {
@@ -32,11 +38,11 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .mode-radio {
     display: none;
-    /* Hide actual radio buttons */
 }
 
 .mode-option {
@@ -73,6 +79,7 @@
     gap: 10px;
     justify-items: center;
     width: 100%;
+    flex-shrink: 0;
 }
 
 .swatch {
@@ -87,6 +94,17 @@
 .swatch:hover {
     border: 2px solid #000;
     transform: scale(1.1);
+}
+
+.swatch:active {
+    border: 3px solid white;
+    transform: scale(1.2);
+}
+
+.swatch.selected {
+    border: 3px solid deeppink;
+    transform: scale(1.2);
+    box-shadow: 0 0 5px deeppink;
 }
 
 .red {
@@ -142,6 +160,49 @@
     width: 80%;
     height: 2px;
     background-color: #ddd;
+    flex-shrink: 0;
+}
+
+/* --- HEX PICKER --- */
+.hex-picker-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.hex-label {
+    font-family: 'Comic Sans MS', sans-serif;
+    font-size: 12px;
+}
+
+.picker-row {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+}
+
+.color-input {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #000;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+}
+
+.hex-text-input {
+    width: 70px;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: monospace;
+    text-transform: uppercase;
+    font-size: 12px;
 }
 
 /* --- ERASER --- */
@@ -151,6 +212,8 @@
     align-items: center;
     cursor: pointer;
     transition: transform 0.2s;
+    flex-shrink: 0;
+    margin-bottom: 20px;
 }
 
 .eraser-container:hover {
@@ -193,6 +256,7 @@
     gap: 5px;
     font-family: 'Comic Sans MS', sans-serif;
     font-size: 12px;
+    flex-shrink: 0;
 }
 
 input[type=number] {

@@ -1,4 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, Input, Output, EventEmitter, ElementRef } from '@angular/core'
+import { limitToStage } from './canvas.utils';
 import type { StageConfig } from 'konva/lib/Stage'
 import { Shape, ShapeConfig } from 'konva/lib/Shape'
 import type { CircleConfig } from 'konva/lib/shapes/Circle'
@@ -9,160 +10,410 @@ import type { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon'
 import type { TextConfig } from 'konva/lib/shapes/Text'
 import type { TransformerConfig } from 'konva/lib/shapes/Transformer'
 import Konva from 'konva'
+import { ShapeService } from '../services/shape';
+import { ShapeDTO } from '../models/shapedto';
+import { ShapeDtoPipe } from '../pipes/shape-dto-pipe';
 
 import {
   CoreShapeComponent,
+  KonvaComponent,
+  NgKonvaEventObject,
   StageComponent,
 } from 'ng2-konva'
+import { SideToRadiusPipe } from '../pipes/side-to-radius-pipe'
+import { NodeConfig } from 'konva/lib/Node'
+import { ColorToCanvas } from '../color-to-canvas';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-canvas',
   imports: [StageComponent, CoreShapeComponent],
   templateUrl: './canvas.html',
   styleUrl: './canvas.css',
+  providers: [SideToRadiusPipe, ShapeDtoPipe]
 })
 export class Canvas {
-  @ViewChild('transformer') transformer!: any
-  @ViewChild('rectRef') rectRef!: any
-  @ViewChild('circleRef') circleRef!: any
-  @ViewChild('ellipseRef') ellipseRef! : any
-  @ViewChild('regularPolygonRef') regularPolygonRef! : any
-  @ViewChild('selectionButtons') selectionButtons! : any
-  @ViewChild("canvas_wrap_ref") canvas_wrap_element! : any
-  currentTool = 'select'
+  constructor(
+    private sidetoradiuspipe: SideToRadiusPipe,
+    private shapeServie: ShapeService,
+    private shapedto: ShapeDtoPipe,
+    private service: ColorToCanvas
+  ) { }
+
+  @ViewChild('transformer') transformer!: KonvaComponent
+  @ViewChild('transReg') transReg!: KonvaComponent
+  @ViewChild('rectRef') rectRef!: KonvaComponent
+  @ViewChild('circleRef') circleRef!: KonvaComponent
+  @ViewChild('ellipseRef') ellipseRef!: KonvaComponent
+  @ViewChild('regularPolygonRef') regularPolygonRef!: KonvaComponent
+  @ViewChild('selectionButtons') selectionButtons!: KonvaComponent
+  @ViewChild("canvas_wrap_ref") canvas_wrap_element: any
+  @ViewChild('stageRef') stageRef!: KonvaComponent;
+  @Input("currentTool") currentTool = 'select'
+  @Output("currentToolChange") currentToolChange = new EventEmitter<string>()
   currentFillColor = "white"
   currentStrokeColor = "black"
   currentStrokeWidth = 3
-
-  isDrawing : boolean = false
-  x_start : number = 0
-  y_start : number = 0
-  x_end : number = 0
-  y_end : number = 0
-
   
+  lineShape: LineConfig = {
+    points: [],
+    visible: false,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    draggable : true,
+    type : "line"
+  }
+  squareShape: RectConfig = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    visible: false,
+    fill: this.currentFillColor,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    draggable : true,
+    type : "square"
+    
+  };
+  rectangleShape: RectConfig = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    visible: false,
+    fill: this.currentFillColor,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    draggable : true,
+    type : "rectangle"
 
+  };
+  circleShape: CircleConfig = {
+    x: 0,
+    y: 0,
+    radius: 0,
+    visible: false,
+    fill: this.currentFillColor,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    draggable : true,
+    type : "circle"
+  };
+  ellipseShape: EllipseConfig = {
+    x: 0,
+    y: 0,
+    radiusX: 0,
+    radiusY: 0,
+    visible: false,
+    fill: this.currentFillColor,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    draggable : true,
+    type : "ellipse"
+  };
+  triangleShape: RegularPolygonConfig = {
+    x: 0,
+    y: 0,
+    sides: 3,
+    radius: 0,
+    visible: false,
+    fill: this.currentFillColor,
+    stroke: this.currentStrokeColor,
+    strokeWidth: this.currentStrokeWidth,
+    draggable : true,
+    type : "triangle"
+  };
+
+
+  private subs = new Subscription();
+  isDrawing: boolean = false
+  x_start: number = 0
+  y_start: number = 0
+  x_end: number = 0
+  y_end: number = 0
+
+  ngOnInit() {
+    this.subs.add(this.service.strokeColor$.subscribe(c => {
+      this.currentStrokeColor = c;
+    }));
+    this.subs.add(this.service.fillColor$.subscribe(c => {
+      this.currentFillColor = c;
+    }));
+    this.subs.add(this.service.strokeWidth$.subscribe(c => {
+      this.currentStrokeWidth = c;
+    }));
+  }
   public configStage: StageConfig = {
     width: window.innerWidth,
-    height: window.innerHeight,
+    height: window.innerHeight
   }
 
-  public rect1 : RectConfig = {
-    x : 100,
-    y : 100,
-    fill : "red",
-    stroke : "black",
-    type : "rectangle",
-    strokeWidth : 4,
-    height : 100,
-    width : 200,
-    draggable : true,
-    visible : true
+  ngAfterViewInit() {
+    const rect = this.canvas_wrap_element.nativeElement.getBoundingClientRect()
+
+    this.configStage = {
+      width: rect.width,
+      height: rect.height
+    }
   }
 
-  shapeConfigs : ShapeConfig[] = [this.rect1]
-
-  public rubber_band : RectConfig = {
-    x : this.x_start,
-    y : this.y_start,
-    width : 0,
-    height : 0,
-    opacity : 0.25,
-    fill : "#03dffc",
-    stroke: "#27517a",
-    strokeWidth : 2,
-    visible : false
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
-  public trans1: TransformerConfig = {
-    rotateEnabled: true,
+  shapeConfigs: ShapeConfig[] = []
+
+  public trans_all: TransformerConfig = {
+    rotateEnabled: false,
     enabledAnchors: [
-      'top-left',
-      'top-right',
-      'bottom-left',
-      'bottom-right'
+      'top-left', 'top-right', 'top-center',
+      'bottom-left', 'bottom-right', 'bottom-center',
+      'middle-left', 'middle-right'
     ]
   }
 
-  handleStageMouseDown(event : any) {
+  public trans_regular: TransformerConfig = {
+    rotateEnabled: false,
+    enabledAnchors: [
+      'top-left', 'top-right',
+      'bottom-left', 'bottom-right',
+    ]
+  }
+
+  handleStageMouseDown() {
     if (this.currentTool === "select")
       return;
 
     this.isDrawing = true
 
-    const stage = event.target.getStage()
-    const position = stage.getPointerPosition()
+    // const stage = event.event.target.getStage()
+    const stage = this.stageRef.getStage() as Konva.Stage
+    const position = stage?.getPointerPosition()
+    this.x_start = position?.x ?? 0
+    this.y_start = position?.y ?? 0
 
-    this.x_start = position.x
-    this.y_start = position.y
-
-    this.rubber_band = {...this.rubber_band, x : this.x_start, y : this.y_start, visible : true}
+    switch (this.currentTool) {
+      case "line":
+        this.lineShape = {
+          ...this.lineShape,
+          points : [this.x_start, this.y_start],
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+      case "square":
+        this.squareShape = {
+          ...this.squareShape,
+          x : this.x_start,
+          y : this.y_start,
+          fill : this.currentFillColor,
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+      case "rectangle":
+        this.rectangleShape = {
+          ...this.rectangleShape,
+          x : this.x_start,
+          y : this.y_start,
+          fill : this.currentFillColor,
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+      case "circle":
+        this.circleShape = {
+          ...this.circleShape,
+          x : this.x_start,
+          y : this.y_start,
+          fill : this.currentFillColor,
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+      case "ellipse":
+        this.ellipseShape = {
+          ...this.ellipseShape,
+          x : this.x_start,
+          y : this.y_start,
+          fill : this.currentFillColor,
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+      case "triangle":
+        this.triangleShape = {
+          ...this.triangleShape,
+          x : this.x_start,
+          y : this.y_start,
+          fill : this.currentFillColor,
+          stroke : this.currentStrokeColor,
+          strokeWidth : this.currentStrokeWidth,
+          visible : true
+        }
+        break;
+    }
   }
 
-  handleStageMouseMove(event : any) {
+  handleStageMouseMove() {
     if (!this.isDrawing)
       return
 
-    const stage = event.target.getStage()
-    const position = stage.getPointerPosition()
+    const stage = this.stageRef.getStage() as Konva.Stage | undefined
+    const position = stage?.getPointerPosition()
 
-    this.x_end = position.x
-    this.y_end = position.y
+    this.x_end = position?.x ?? 0
+    this.y_end = position?.y ?? 0
 
-    this.rubber_band = {
-      ...this.rubber_band,
-      width : Math.abs(this.x_end - this.x_start),
-      height : Math.abs(this.y_end - this.y_start)
+    const width = Math.abs(this.x_end - this.x_start)
+    const height = Math.abs(this.y_end - this.y_start)
+    const x_center = (this.x_start + this.x_end) / 2
+    const y_center = (this.y_start + this.y_end) / 2
+    switch (this.currentTool) {
+      case "line":
+        this.lineShape = {
+          ...this.lineShape,
+          points: [
+            this.x_start, this.y_start,
+            this.x_end, this.y_end
+          ]
+        }
+        break;
+      case "square":
+        this.squareShape = {
+          ...this.squareShape,
+          x: Math.min(this.x_start, this.x_end),
+          y: Math.min(this.y_start, this.y_end),
+          width: Math.min(width, height),
+          height: Math.min(width, height)
+        }
+        break;
+      case "rectangle":
+        this.rectangleShape = {
+          ...this.rectangleShape,
+          x: Math.min(this.x_start, this.x_end),
+          y: Math.min(this.y_start, this.y_end),
+          width: width,
+          height: height
+        }
+        break;
+      case "circle":
+        this.circleShape = {
+          ...this.circleShape,
+          x: x_center,
+          y: y_center,
+          radius: Math.min(width, height) / 2
+        }
+        break;
+      case "ellipse":
+        this.ellipseShape = {
+          ...this.ellipseShape,
+          x: x_center,
+          y: y_center,
+          radiusX: width / 2,
+          radiusY: height / 2
+        }
+        break;
+      case "triangle":
+        const side = Math.min(width, height)
+        this.triangleShape = {
+          ...this.triangleShape,
+          x: x_center,
+          y: y_center,
+          radius: this.sidetoradiuspipe.transform(side, 3)
+        }
+        break;
     }
   }
 
-  handleStageMouseUp(event : any) {
+  handleStageMouseUp() {
     this.isDrawing = false
 
-    this.rubber_band = {...this.rubber_band, visible : false}
-
-    if (this.currentTool === "rectangle") {
-      const rectangle : RectConfig = {
-        x : this.x_start,
-        y : this.y_start,
-        height : this.rubber_band.height,
-        width : this.rubber_band.width,
-        fill : this.currentFillColor,
-        stroke : this.currentStrokeColor,
-        strokeWidth : this.currentStrokeWidth,
-        draggable : true,
-        type : "rectangle"
-      }
-      this.shapeConfigs.push(rectangle);
-    }
-    else if (this.currentTool === "ellipse") {
-      const ellipse : EllipseConfig = {
-        x : Math.abs(this.x_end + this.x_start) / 2,
-        y : Math.abs(this.y_end + this.y_start) / 2,
-        radiusY : (this.rubber_band.height) ?  this.rubber_band.height/ 2: 0,
-        radiusX : (this.rubber_band.width) ?  this.rubber_band.width/ 2: 0,
-        fill : this.currentFillColor,
-        stroke : this.currentStrokeColor,
-        strokeWidth : this.currentStrokeWidth,
-        draggable : true,
-        type : "ellipse"
-      }
-      this.shapeConfigs.push(ellipse);
+    switch (this.currentTool) {
+      case "line":
+        this.shapeConfigs.push({ ...this.lineShape })
+        this.lineShape = {...this.lineShape, visible : false}
+        break;
+      case "square":
+        this.shapeConfigs.push({ ...this.squareShape })
+        this.squareShape = {...this.squareShape, visible : false}
+        break;
+      case "rectangle":
+        this.shapeConfigs.push({ ...this.rectangleShape })
+        this.rectangleShape = {...this.rectangleShape, visible : false}
+        break;
+      case "circle":
+        this.shapeConfigs.push({ ...this.circleShape })
+        this.circleShape = {...this.circleShape, visible : false}
+        break;
+      case "ellipse":
+        this.shapeConfigs.push({ ...this.ellipseShape })
+        this.ellipseShape = {...this.ellipseShape, visible : false}
+        break;
+      case "triangle":
+        this.shapeConfigs.push({ ...this.triangleShape })
+        this.triangleShape = {...this.triangleShape, visible : false}
+        break;
     }
 
     this.currentTool = 'select'
+    this.currentToolChange.emit(this.currentTool)
+
+    const lastIndex : number = this.shapeConfigs.length - 1;
+    // this.shapeServie.draw(this.shapedto.transform(this.shapeConfigs[lastIndex])).subscribe({
+    //   next: (shape) => {
+    //     console.log('User created:', shape);
+    //   },
+    //   error: (error) => {
+    //     console.error('Error creating user:', error);
+    //   }
+    // })
   }
 
-  public select(ref: any) {
-    const node = ref.getNode()
-    const tr = this.transformer.getNode()
+  public select(event: NgKonvaEventObject<MouseEvent>) {
+    const shapeNode = event.event.target as Konva.Node
+    console.log(shapeNode)
+    // const node = ref.getNode()
+    let tr: Konva.Transformer
+    let other_tr: Konva.Transformer
+    if (shapeNode.attrs['type'] === 'square' || shapeNode.attrs['type'] === 'circle') {
+      tr = this.transReg.getStage() as Konva.Transformer
+      other_tr = this.transformer.getStage() as Konva.Transformer
+    }
+    else {
+      tr = this.transformer.getStage() as Konva.Transformer
+      other_tr = this.transReg.getStage() as Konva.Transformer
+    }
 
-    tr.nodes([node])
-    tr.getLayer().batchDraw()
+    tr.nodes([shapeNode])
+    other_tr.nodes([])
+    // tr.getLayer()?.batchDraw()
   }
 
-  handleTransformEnd(event : any, index : number) {
-    const node = event.target
+  public checkDeselect(event: NgKonvaEventObject<MouseEvent>) {
+    // If we clicked on the stage (empty area), deselect
+    const clickedNode = event.event.target
+    const stage = this.stageRef.getStage()
+    // const clickedOnEmpty = event.event.target === stage
+    if (stage && clickedNode === stage) {
+      let tr = this.transformer.getStage() as Konva.Transformer
+      tr.nodes([]) // Clear selection
+      tr.getLayer()?.batchDraw()
+
+      tr = this.transReg.getStage() as Konva.Transformer
+      tr.nodes([]) // Clear selection
+      tr.getLayer()?.batchDraw()
+    }
+  }
+
+  handleTransformEnd(event: NgKonvaEventObject<MouseEvent>, index: number) {
+    const node = event.event.target
     this.shapeConfigs[index] = {
       ...this.shapeConfigs[index],
       x: node.x(),
@@ -171,14 +422,14 @@ export class Canvas {
       height: node.height() * node.scaleY(),
       scaleX: 1,
       scaleY: 1,
-      rotation : node.rotation()
+      rotation: node.rotation()
     }
     node.scaleX(1)
     node.scaleY(1)
   }
 
-  handleDragEnd(event : any, index : number) {
-     const node = event.target
+  handleDragEnd(event: NgKonvaEventObject<MouseEvent>, index: number) {
+    const node = event.event.target
     this.shapeConfigs[index] = {
       ...this.shapeConfigs[index],
       x: node.x(),
@@ -186,22 +437,12 @@ export class Canvas {
     }
   }
 
-  public checkDeselect(event: any) {
-    // If we clicked on the stage (empty area), deselect
-    const clickedOnEmpty = event.target === event.target.getStage()
-    if (clickedOnEmpty) {
-      const tr = this.transformer.getStage() as Konva.Transformer
-      tr.nodes([]) // Clear selection
-      tr.getLayer()?.batchDraw()
-    }
-  }
-
-  public getRadius(sideLength : number, sides_number : number) : number {
+  public getRadius(sideLength: number, sides_number: number): number {
     const radius = sideLength / (2 * Math.sin(Math.PI / sides_number))
     return radius
   }
 
-  public handleMouseMove(event: any, object : any): void {
+  public handleMouseMove(event: any, object: any): void {
     // const mousePos = event.target.getStage().getPointerPosition()
     // const x = mousePos.x - object['x']
     // const y = mousePos.y - object['y']
@@ -212,22 +453,32 @@ export class Canvas {
     // this.mousePosText = { ...this.mousePosText, text: 'Mouse out of ellipse' }
   }
 
-  public handleMouseOver(event : any) {
-    event.target.getStage().container().style.cursor = 'pointer'
+  public handleMouseOver(event: NgKonvaEventObject<MouseEvent>) {
+    const stage = event.event.target.getStage()
+    if (stage)
+      stage.container().style.cursor = 'pointer'
   }
 
-  public handeMouseUp(event : any) {
-    event.target.getStage().container().style.cursor = 'pointer'
+  public handeMouseUp(event: NgKonvaEventObject<MouseEvent>) {
+    const stage = event.event.target.getStage()
+    if (stage)
+      stage.container().style.cursor = 'pointer'
   }
 
-  public handleMouseLeave(event : any) {
-    event.target.getStage().container().style.cursor = 'default'
+  public handleMouseLeave(event: NgKonvaEventObject<MouseEvent>) {
+    const stage = event.event.target.getStage()
+    if (stage)
+      stage.container().style.cursor = 'default'
   }
 
-  public handleDragMove(event : any, shapeIndex : number) {
-    event.target.getStage().container().style.cursor = 'move'
-    const mousePos = event.target.getStage().getPointerPosition()
+  public handleDragMove(event: NgKonvaEventObject<MouseEvent>, shapeIndex: number) {
+    const stage = event.event.target.getStage()
+    if (stage)
+      stage.container().style.cursor = 'move'
+
+    const mousePos = stage?.getPointerPosition()
     // this.shapeConfigs[shapeIndex] = {...this.shapeConfigs[shapeIndex], x : mousePos.x, y : mousePos.y}
     // this.ShapePosText = { ...this.ShapePosText, text: 'shape position: x = ' + mousePos.x + ', y = ' + mousePos.y }
   }
+
 }
