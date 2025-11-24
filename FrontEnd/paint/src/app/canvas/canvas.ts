@@ -21,7 +21,6 @@ import {
   StageComponent,
 } from 'ng2-konva'
 import { SideToRadiusPipe } from '../pipes/side-to-radius-pipe'
-import { NodeConfig } from 'konva/lib/Node'
 import { ColorToCanvas } from '../color-to-canvas';
 import { Subscription } from 'rxjs';
 
@@ -54,6 +53,11 @@ export class Canvas {
   currentFillColor = "white"
   currentStrokeColor = "black"
   currentStrokeWidth = 3
+
+  public configStage: StageConfig = {
+    width: window.innerWidth,
+    height: window.innerHeight
+  }
   
   lineShape: LineConfig = {
     points: [],
@@ -133,35 +137,6 @@ export class Canvas {
   x_end: number = 0
   y_end: number = 0
 
-  ngOnInit() {
-    this.subs.add(this.service.strokeColor$.subscribe(c => {
-      this.currentStrokeColor = c;
-    }));
-    this.subs.add(this.service.fillColor$.subscribe(c => {
-      this.currentFillColor = c;
-    }));
-    this.subs.add(this.service.strokeWidth$.subscribe(c => {
-      this.currentStrokeWidth = c;
-    }));
-  }
-  public configStage: StageConfig = {
-    width: window.innerWidth,
-    height: window.innerHeight
-  }
-
-  ngAfterViewInit() {
-    const rect = this.canvas_wrap_element.nativeElement.getBoundingClientRect()
-
-    this.configStage = {
-      width: rect.width,
-      height: rect.height
-    }
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
-
   shapeConfigs: ShapeConfig[] = []
 
   public trans_all: TransformerConfig = {
@@ -179,6 +154,31 @@ export class Canvas {
       'top-left', 'top-right',
       'bottom-left', 'bottom-right',
     ]
+  }
+
+  ngOnInit() {
+    this.subs.add(this.service.strokeColor$.subscribe(c => {
+      this.currentStrokeColor = c;
+    }));
+    this.subs.add(this.service.fillColor$.subscribe(c => {
+      this.currentFillColor = c;
+    }));
+    this.subs.add(this.service.strokeWidth$.subscribe(c => {
+      this.currentStrokeWidth = c;
+    }));
+  }
+
+  ngAfterViewInit() {
+    const rect = this.canvas_wrap_element.nativeElement.getBoundingClientRect()
+
+    this.configStage = {
+      width: rect.width,
+      height: rect.height
+    }
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   handleStageMouseDown() {
