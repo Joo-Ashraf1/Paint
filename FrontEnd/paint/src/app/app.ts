@@ -5,6 +5,7 @@ import { Menu } from './menu/menu'
 import { Canvas } from './canvas/canvas'
 import { ColorPanel } from './color-panel/color-panel'
 
+
 @Component({
   selector: 'app-root',
   imports: [Toolbar, Menu, Canvas, ColorPanel],
@@ -13,11 +14,11 @@ import { ColorPanel } from './color-panel/color-panel'
 })
 export class App implements OnChanges {
   public title = signal("Paint")
-  selectedTool : string = 'select'
+  appSelectedTool : string = 'select'
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(`selectedTool changed to ${this.selectedTool} from App`)
-    this.selectedTool = 'select'
+    console.log(`selectedTool changed to ${this.appSelectedTool} from App`)
+    this.appSelectedTool = 'select'
   }
   
 }

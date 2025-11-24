@@ -31,23 +31,77 @@
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.3s ease;
     flex-shrink: 0;
+    padding: 8px;
+    border-radius: 8px;
+    position: relative;
 }
 
 .tool-item:hover {
     transform: scale(1.1);
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Selected state with cool effects */
+.tool-item.selected {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    animation: pulse 0.6s ease-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(102, 126, 234, 0.7);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+    }
+    100% {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+}
+
+.tool-item.selected .label {
+    color: white;
+    font-weight: bold;
+}
+
+/* Change icon colors when selected */
+.tool-item.selected .icon {
+    filter: brightness(0) invert(1);
+}
+
+/* Glow effect for selected tool */
+.tool-item.selected::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    z-index: -1;
+    opacity: 0.5;
+    filter: blur(8px);
 }
 
 .label {
     font-family: 'Comic Sans MS', sans-serif;
     font-size: 12px;
     margin-top: 5px;
+    transition: color 0.3s ease;
 }
 
 .icon {
     background: transparent;
     box-sizing: border-box;
+    transition: filter 0.3s ease;
 }
 
 /* Shapes */
@@ -96,6 +150,14 @@
     margin-top: 4px;
 }
 
+.tool-item.selected .triangle {
+    border-bottom-color: white;
+}
+
+.tool-item.selected .triangle::after {
+    border-bottom-color: transparent;
+}
+
 .diamond {
     width: 24px;
     height: 24px;
@@ -123,6 +185,14 @@
     clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
 }
 
+.tool-item.selected .pentagon {
+    background-color: white;
+}
+
+.tool-item.selected .pentagon::after {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
 .hexagon {
     width: 36px;
     height: 32px;
@@ -142,9 +212,21 @@
     clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
 }
 
+.tool-item.selected .hexagon {
+    background-color: white;
+}
+
+.tool-item.selected .hexagon::after {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
 .line-shape {
     width: 4px;
     height: 36px;
     background-color: #000;
     border-radius: 2px;
+}
+
+.tool-item.selected .line-shape {
+    background-color: white;
 }
