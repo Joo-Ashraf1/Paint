@@ -54,7 +54,8 @@ export class Canvas {
   currentFillColor = "white"
   currentStrokeColor = "black"
   currentStrokeWidth = 3
-  
+  eraser:boolean=false;
+
   lineShape: LineConfig = {
     points: [],
     visible: false,
@@ -74,7 +75,7 @@ export class Canvas {
     strokeWidth: this.currentStrokeWidth,
     draggable : true,
     type : "square"
-    
+
   };
   rectangleShape: RectConfig = {
     x: 0,
@@ -126,13 +127,16 @@ export class Canvas {
   };
 
 
-  private subs = new Subscription();
+
   isDrawing: boolean = false
   x_start: number = 0
   y_start: number = 0
   x_end: number = 0
   y_end: number = 0
 
+  //here 3mk youssef handles inputs from color panel
+
+  private subs = new Subscription();
   ngOnInit() {
     this.subs.add(this.service.strokeColor$.subscribe(c => {
       this.currentStrokeColor = c;
@@ -143,6 +147,9 @@ export class Canvas {
     this.subs.add(this.service.strokeWidth$.subscribe(c => {
       this.currentStrokeWidth = c;
     }));
+    this.subs.add(this.service.eraser$.subscribe(c => {
+      this.eraser = c;
+    }))
   }
   public configStage: StageConfig = {
     width: window.innerWidth,

@@ -18,6 +18,7 @@ export class ColorPanel {
    currentMode:string="fill";
    maxStrokeWidth:number=50;
    minStrokeWidth:number=0;
+   eraser:boolean=false;
    constructor(private service:ColorToCanvas) {}
 
 
@@ -81,6 +82,7 @@ export class ColorPanel {
     this.service.setFillColor(this.currentFillColor);
     this.service.setStrokeColor(this.currentStrokeColor);
     this.service.setStrokeWidth(this.currentStrokeWidth);
+    this.service.setEraser(this.eraser);
   }
 
   onStrokeWidthChange(event: any) {
@@ -94,5 +96,13 @@ export class ColorPanel {
      this.currentStrokeWidth=Number(event.target.value);
      this.service.setStrokeWidth(this.currentStrokeWidth);
 
+  }
+  selectEraser() {
+     this.eraser=!this.eraser;
+     this.service.setEraser(this.eraser);
+
+  }
+  checkEraser() {
+     return this.eraser;
   }
 }

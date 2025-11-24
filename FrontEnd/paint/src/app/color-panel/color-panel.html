@@ -58,8 +58,8 @@
      <div class="separator"></div>
 
      <!-- Eraser -->
-     <div class="eraser-container" title="Eraser">
-          <div class="real-eraser"></div>
+     <div class="eraser-container" [class.selected]="checkEraser()" (click)="selectEraser()" title="Eraser">
+          <div class="real-eraser" ></div>
           <div class="eraser-label">Eraser</div>
      </div>
 
