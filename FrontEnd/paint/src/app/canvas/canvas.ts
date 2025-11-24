@@ -398,7 +398,7 @@ export class Canvas {
     //check for this.currentTool === 'copy' and then send copy request
   }
 
-  public checkDeselect(event: NgKonvaEventObject<MouseEvent>) {
+  public Deselect(event: NgKonvaEventObject<MouseEvent>) {
     // If we clicked on the stage (empty area), deselect
     const clickedNode = event.event.target
     const stage = this.stageRef.getStage()
