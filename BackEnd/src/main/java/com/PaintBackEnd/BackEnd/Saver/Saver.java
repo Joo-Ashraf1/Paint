@@ -88,6 +88,7 @@ public class Saver {
             ShapesFactory factory = new ShapesFactory();
 
             for (ShapeDTO dto : dtoArray) {
+                dto.id = 0 ;
                 Shape shape = factory.makeShape(dto);
                 memory.addShape(shape);
             }

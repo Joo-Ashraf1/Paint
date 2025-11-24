@@ -69,6 +69,13 @@ public class Memory {
         return dtos ;
     }
 
+    public static int getIdCounter() {
+        return idCounter;
+    }
+
+    public static void setIdCounter(int idCounter) {
+        Memory.idCounter = idCounter;
+    }
 
     private void incrementIdCounter() {
         idCounter++;

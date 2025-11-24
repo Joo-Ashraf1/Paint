@@ -1,0 +1,63 @@
+[
+  {
+    "shapeType": "line",
+    "id": 1,
+    "rotation": 30,
+    "x_start": 5.5,
+    "y_start": 5.2,
+    "x_end": 6.4,
+    "y_end": 6.1,
+    "fill": "yellow",
+    "stroke": "red",
+    "strokeWidth": 12
+  },
+  {
+    "shapeType": "ellipse",
+    "id": 3,
+    "rotation": 80,
+    "x_start": 1.5,
+    "y_start": 1.2,
+    "x_end": 0.4,
+    "y_end": 0.1,
+    "fill": "blue",
+    "stroke": "red",
+    "strokeWidth": 5,
+    "radius_x": 9.0,
+    "radius_y": 11.0
+  },
+  {
+    "shapeType": "triangle",
+    "id": 4,
+    "rotation": 20,
+    "x_start": 8.5,
+    "y_start": 8.2,
+    "x_end": 3.4,
+    "y_end": 5.1,
+    "fill": "orange",
+    "stroke": "yellow",
+    "strokeWidth": 7,
+    "side": 8.0
+  },
+  {
+    "shapeType": "line",
+    "id": 6,
+    "x_start": 1.5,
+    "y_start": 2.2,
+    "x_end": 2.4,
+    "y_end": 4.1,
+    "fill": "orange",
+    "stroke": "yellow",
+    "strokeWidth": 7
+  },
+  {
+    "shapeType": "line",
+    "id": 7,
+    "x_start": 1.5,
+    "y_start": 2.2,
+    "x_end": 2.4,
+    "y_end": 4.1,
+    "fill": "orange",
+    "stroke": "yellow",
+    "strokeWidth": 7
+  }
+]
