@@ -366,14 +366,14 @@ export class Canvas {
     this.currentToolChange.emit(this.currentTool)
 
     const lastIndex : number = this.shapeConfigs.length - 1;
-    // this.shapeServie.draw(this.shapedto.transform(this.shapeConfigs[lastIndex])).subscribe({
-    //   next: (shape) => {
-    //     console.log('User created:', shape);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error creating user:', error);
-    //   }
-    // })
+    this.shapeServie.draw(this.shapedto.transform(this.shapeConfigs[lastIndex])).subscribe({
+      next: (shape) => {
+        console.log('User created:', shape);
+      },
+      error: (error) => {
+        console.error('Error creating user:', error);
+      }
+    })
   }
 
   public select(event: NgKonvaEventObject<MouseEvent>) {
