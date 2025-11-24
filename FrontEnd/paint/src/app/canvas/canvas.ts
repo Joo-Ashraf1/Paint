@@ -394,6 +394,8 @@ export class Canvas {
     tr.nodes([shapeNode])
     other_tr.nodes([])
     // tr.getLayer()?.batchDraw()
+
+    //check for this.currentTool === 'copy' and then send copy request
   }
 
   public checkDeselect(event: NgKonvaEventObject<MouseEvent>) {
