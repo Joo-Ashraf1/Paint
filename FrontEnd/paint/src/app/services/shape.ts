@@ -7,7 +7,7 @@ import { ShapeDTO } from '../models/shapedto';
   providedIn: 'root',
 })
 export class ShapeService {
-  private apiUrl = "https://webhook.site/016a2250-582c-46e8-8da6-79244792a807"
+  private apiUrl = "http://localhost:8080"
 
   private httpOptions = {
     headers: new HttpHeaders({
@@ -18,6 +18,36 @@ export class ShapeService {
   constructor(private http: HttpClient) { }
 
   draw(shape : ShapeDTO): Observable<ShapeDTO> {
-    return this.http.post<ShapeDTO>(this.apiUrl, shape, this.httpOptions)
+    const url = this.apiUrl + "/draw"
+    return this.http.post<ShapeDTO>(url, shape, this.httpOptions)
   }
+
+  copy(shape : ShapeDTO): Observable<ShapeDTO> {
+    const url = this.apiUrl + "/copy"
+    return this.http.post<ShapeDTO>(url, shape, this.httpOptions)
+  }
+
+  delete(shape : ShapeDTO): Observable<ShapeDTO> {
+    const url = this.apiUrl + "/delete"
+    return this.http.delete<ShapeDTO>(url, {...this.httpOptions, body:shape})
+  }
+
+  update(shape : ShapeDTO): Observable<ShapeDTO> {
+    const url = this.apiUrl + "/update"
+    return this.http.put<ShapeDTO>(url, shape, this.httpOptions)
+  }
+
+  undo(shape : ShapeDTO): Observable<ShapeDTO> {
+    const url = this.apiUrl + "/undo"
+    return this.http.get<ShapeDTO>(url, this.httpOptions)
+  }
+
+  redo(shape : ShapeDTO): Observable<ShapeDTO> {
+    const url = this.apiUrl + "/redo"
+    return this.http.get<ShapeDTO>(url, this.httpOptions)
+  }
+
+  //save
+
+  //load
 }
