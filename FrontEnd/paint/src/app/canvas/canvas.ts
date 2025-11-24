@@ -21,12 +21,9 @@ import {
   StageComponent,
 } from 'ng2-konva'
 import { SideToRadiusPipe } from '../pipes/side-to-radius-pipe'
-<<<<<<< Updated upstream
-=======
 import { NodeConfig } from 'konva/lib/Node'
 import {ColorToCanvas} from '../color-to-canvas';
 import {Subscription} from 'rxjs';
->>>>>>> Stashed changes
 
 @Component({
   selector: 'app-canvas',
@@ -36,16 +33,13 @@ import {Subscription} from 'rxjs';
   providers: [SideToRadiusPipe, ShapeDtoPipe]
 })
 export class Canvas {
-<<<<<<< Updated upstream
   constructor(
     private sidetoradiuspipe : SideToRadiusPipe,
     private shapeServie : ShapeService,
-    private shapedto : ShapeDtoPipe
+    private shapedto : ShapeDtoPipe,
+    private service : ColorToCanvas
   ) {}
-
-=======
-  constructor(private sidetoradiuspipe : SideToRadiusPipe,private service:ColorToCanvas) {}
->>>>>>> Stashed changes
+  
   @ViewChild('transformer') transformer!: KonvaComponent
   @ViewChild('transReg') transReg! : KonvaComponent
   @ViewChild('rectRef') rectRef!: KonvaComponent
