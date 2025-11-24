@@ -58,14 +58,14 @@ export class Canvas {
     width: window.innerWidth,
     height: window.innerHeight
   }
-  
+
   lineShape: LineConfig = {
     points: [],
     visible: false,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "line"
+    draggable: true,
+    type: "line"
   }
   squareShape: RectConfig = {
     x: 0,
@@ -76,9 +76,9 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "square"
-    
+    draggable: true,
+    type: "square"
+
   };
   rectangleShape: RectConfig = {
     x: 0,
@@ -89,8 +89,8 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "rectangle"
+    draggable: true,
+    type: "rectangle"
 
   };
   circleShape: CircleConfig = {
@@ -101,8 +101,8 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "circle"
+    draggable: true,
+    type: "circle"
   };
   ellipseShape: EllipseConfig = {
     x: 0,
@@ -113,8 +113,8 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "ellipse"
+    draggable: true,
+    type: "ellipse"
   };
   triangleShape: RegularPolygonConfig = {
     x: 0,
@@ -125,8 +125,8 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "triangle"
+    draggable: true,
+    type: "triangle"
   };
 
 
@@ -197,65 +197,65 @@ export class Canvas {
       case "line":
         this.lineShape = {
           ...this.lineShape,
-          points : [this.x_start, this.y_start],
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          points: [this.x_start, this.y_start],
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
       case "square":
         this.squareShape = {
           ...this.squareShape,
-          x : this.x_start,
-          y : this.y_start,
-          fill : this.currentFillColor,
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          x: this.x_start,
+          y: this.y_start,
+          fill: this.currentFillColor,
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
       case "rectangle":
         this.rectangleShape = {
           ...this.rectangleShape,
-          x : this.x_start,
-          y : this.y_start,
-          fill : this.currentFillColor,
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          x: this.x_start,
+          y: this.y_start,
+          fill: this.currentFillColor,
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
       case "circle":
         this.circleShape = {
           ...this.circleShape,
-          x : this.x_start,
-          y : this.y_start,
-          fill : this.currentFillColor,
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          x: this.x_start,
+          y: this.y_start,
+          fill: this.currentFillColor,
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
       case "ellipse":
         this.ellipseShape = {
           ...this.ellipseShape,
-          x : this.x_start,
-          y : this.y_start,
-          fill : this.currentFillColor,
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          x: this.x_start,
+          y: this.y_start,
+          fill: this.currentFillColor,
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
       case "triangle":
         this.triangleShape = {
           ...this.triangleShape,
-          x : this.x_start,
-          y : this.y_start,
-          fill : this.currentFillColor,
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          x: this.x_start,
+          y: this.y_start,
+          fill: this.currentFillColor,
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
     }
@@ -338,34 +338,34 @@ export class Canvas {
     switch (this.currentTool) {
       case "line":
         this.shapeConfigs.push({ ...this.lineShape })
-        this.lineShape = {...this.lineShape, visible : false}
+        this.lineShape = { ...this.lineShape, visible: false }
         break;
       case "square":
         this.shapeConfigs.push({ ...this.squareShape })
-        this.squareShape = {...this.squareShape, visible : false}
+        this.squareShape = { ...this.squareShape, visible: false }
         break;
       case "rectangle":
         this.shapeConfigs.push({ ...this.rectangleShape })
-        this.rectangleShape = {...this.rectangleShape, visible : false}
+        this.rectangleShape = { ...this.rectangleShape, visible: false }
         break;
       case "circle":
         this.shapeConfigs.push({ ...this.circleShape })
-        this.circleShape = {...this.circleShape, visible : false}
+        this.circleShape = { ...this.circleShape, visible: false }
         break;
       case "ellipse":
         this.shapeConfigs.push({ ...this.ellipseShape })
-        this.ellipseShape = {...this.ellipseShape, visible : false}
+        this.ellipseShape = { ...this.ellipseShape, visible: false }
         break;
       case "triangle":
         this.shapeConfigs.push({ ...this.triangleShape })
-        this.triangleShape = {...this.triangleShape, visible : false}
+        this.triangleShape = { ...this.triangleShape, visible: false }
         break;
     }
 
     this.currentTool = 'select'
     this.currentToolChange.emit(this.currentTool)
 
-    const lastIndex : number = this.shapeConfigs.length - 1;
+    const lastIndex: number = this.shapeConfigs.length - 1;
     this.shapeServie.draw(this.shapedto.transform(this.shapeConfigs[lastIndex])).subscribe({
       next: (shape) => {
         console.log('User created:', shape);
@@ -416,16 +416,61 @@ export class Canvas {
 
   handleTransformEnd(event: NgKonvaEventObject<MouseEvent>, index: number) {
     const node = event.event.target
-    this.shapeConfigs[index] = {
-      ...this.shapeConfigs[index],
-      x: node.x(),
-      y: node.y(),
-      width: node.width() * node.scaleX(),
-      height: node.height() * node.scaleY(),
-      scaleX: 1,
-      scaleY: 1,
-      rotation: node.rotation()
+    if (this.shapeConfigs[index]['type'] === 'circle') {
+      const r = (node.width() * node.scaleX()) / 2;
+      this.shapeConfigs[index] = {
+        ...this.shapeConfigs[index],
+        radius: r,
+        x: node.x(),
+        y: node.y(),
+        scaleX: 1,
+        scaleY: 1,
+        rotation: node.rotation()
+      }
     }
+    else if (this.shapeConfigs[index]['type'] === 'ellipse') {
+      const rx = (node.width() * node.scaleX()) / 2;
+      const ry = (node.height() * node.scaleY()) / 2;
+      this.shapeConfigs[index] = {
+        ...this.shapeConfigs[index],
+        radiusX: rx,
+        radiusY: ry,
+        x: node.x(),
+        y: node.y(),
+        scaleX: 1,
+        scaleY: 1,
+        rotation: node.rotation()
+      }
+    }
+    else if (this.shapeConfigs[index]['type'] === 'line') {
+      let linePoints: number[] = this.shapeConfigs[index]['points']
+      for (let i = 0; i < linePoints.length; i += 2) {
+        linePoints[i] = linePoints[i] * node.scaleX()
+        linePoints[i + 1] = linePoints[i + 1] * node.scaleY()
+      }
+      this.shapeConfigs[index] = {
+        ...this.shapeConfigs[index],
+        points: linePoints,
+        x : node.x(),
+        y : node.y(),
+        scaleX: 1,
+        scaleY: 1,
+        rotation: node.rotation()
+      }
+    }
+    else {
+      this.shapeConfigs[index] = {
+        ...this.shapeConfigs[index],
+        x: node.x(),
+        y: node.y(),
+        width: node.width() * node.scaleX(),
+        height: node.height() * node.scaleY(),
+        scaleX: 1,
+        scaleY: 1,
+        rotation: node.rotation()
+      }
+    }
+
     node.scaleX(1)
     node.scaleY(1)
   }
@@ -478,7 +523,7 @@ export class Canvas {
     if (stage)
       stage.container().style.cursor = 'move'
 
-    const mousePos = stage?.getPointerPosition()
+    // const mousePos = stage?.getPointerPosition()
     // this.shapeConfigs[shapeIndex] = {...this.shapeConfigs[shapeIndex], x : mousePos.x, y : mousePos.y}
     // this.ShapePosText = { ...this.ShapePosText, text: 'shape position: x = ' + mousePos.x + ', y = ' + mousePos.y }
   }
