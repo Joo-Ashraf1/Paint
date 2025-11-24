@@ -21,6 +21,12 @@ import {
   StageComponent,
 } from 'ng2-konva'
 import { SideToRadiusPipe } from '../pipes/side-to-radius-pipe'
+<<<<<<< Updated upstream
+=======
+import { NodeConfig } from 'konva/lib/Node'
+import {ColorToCanvas} from '../color-to-canvas';
+import {Subscription} from 'rxjs';
+>>>>>>> Stashed changes
 
 @Component({
   selector: 'app-canvas',
@@ -30,12 +36,16 @@ import { SideToRadiusPipe } from '../pipes/side-to-radius-pipe'
   providers: [SideToRadiusPipe, ShapeDtoPipe]
 })
 export class Canvas {
+<<<<<<< Updated upstream
   constructor(
     private sidetoradiuspipe : SideToRadiusPipe,
     private shapeServie : ShapeService,
     private shapedto : ShapeDtoPipe
   ) {}
 
+=======
+  constructor(private sidetoradiuspipe : SideToRadiusPipe,private service:ColorToCanvas) {}
+>>>>>>> Stashed changes
   @ViewChild('transformer') transformer!: KonvaComponent
   @ViewChild('transReg') transReg! : KonvaComponent
   @ViewChild('rectRef') rectRef!: KonvaComponent
@@ -50,13 +60,23 @@ export class Canvas {
   currentFillColor = "white"
   currentStrokeColor = "black"
   currentStrokeWidth = 3
-
+  private subs=new Subscription();
   isDrawing : boolean = false
   x_start : number = 0
   y_start : number = 0
   x_end : number = 0
   y_end : number = 0
-
+  ngOnInit () {
+    this.subs.add(this.service.strokeColor$.subscribe(c => {
+      this.currentStrokeColor = c;
+    }));
+    this.subs.add(this.service.fillColor$.subscribe(c => {
+      this.currentFillColor = c;
+    }));
+    this.subs.add(this.service.strokeWidth$.subscribe(c => {
+      this.currentStrokeWidth = c;
+    }));
+  }
   public configStage: StageConfig = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -121,7 +141,7 @@ export class Canvas {
     const position = stage?.getPointerPosition()
     this.x_start = position?.x ?? 0
     this.y_start = position?.y ?? 0
-    
+
 
     if (this.currentTool !== "line")
       this.rubber_band = {
@@ -173,7 +193,7 @@ export class Canvas {
     const width = (this.rubber_band.width) ? this.rubber_band.width : 0
 
     this.rubber_band = {
-      ...this.rubber_band, 
+      ...this.rubber_band,
       height : 0,
       width : 0,
       visible : false
@@ -216,7 +236,7 @@ export class Canvas {
       this.shapeConfigs.push(square);
     }
     else if (this.currentTool === "rectangle") {
-      
+
       const rectangle : RectConfig = {
         x : Math.min(this.x_start, this.x_end),
         y : Math.min(this.y_start, this.y_end),
@@ -396,4 +416,5 @@ export class Canvas {
     // this.shapeConfigs[shapeIndex] = {...this.shapeConfigs[shapeIndex], x : mousePos.x, y : mousePos.y}
     // this.ShapePosText = { ...this.ShapePosText, text: 'shape position: x = ' + mousePos.x + ', y = ' + mousePos.y }
   }
+
 }

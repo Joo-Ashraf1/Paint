@@ -1,48 +1,80 @@
 {
+<<<<<<< Updated upstream
   "hash": "05ae329e",
   "configHash": "7abe9ccf",
   "lockfileHash": "3c38138e",
   "browserHash": "ee02f757",
+=======
+  "hash": "db9027a0",
+  "configHash": "018a0d3d",
+  "lockfileHash": "3c38138e",
+  "browserHash": "23c24a22",
+>>>>>>> Stashed changes
   "optimized": {
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
+<<<<<<< Updated upstream
       "fileHash": "a5b6be7b",
+=======
+      "fileHash": "38be677c",
+>>>>>>> Stashed changes
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
+<<<<<<< Updated upstream
       "fileHash": "a387d67d",
+=======
+      "fileHash": "9be2d6ee",
+>>>>>>> Stashed changes
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
+<<<<<<< Updated upstream
       "fileHash": "d238b7d5",
+=======
+      "fileHash": "6a5c68d0",
+>>>>>>> Stashed changes
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
+<<<<<<< Updated upstream
       "fileHash": "0eb248b2",
+=======
+      "fileHash": "7e5ad185",
+>>>>>>> Stashed changes
       "needsInterop": false
     },
     "ng2-konva": {
       "src": "../../../../../../node_modules/ng2-konva/fesm2022/ng2-konva.mjs",
       "file": "ng2-konva.js",
+<<<<<<< Updated upstream
       "fileHash": "f679b64b",
+=======
+      "fileHash": "d565b6b5",
+>>>>>>> Stashed changes
       "needsInterop": false
     },
     "zone.js": {
       "src": "../../../../../../node_modules/zone.js/fesm2015/zone.js",
       "file": "zone__js.js",
+<<<<<<< Updated upstream
       "fileHash": "9a25a19a",
+=======
+      "fileHash": "4d512c31",
+>>>>>>> Stashed changes
       "needsInterop": true
     },
     "rxjs": {
       "src": "../../../../../../node_modules/rxjs/dist/esm5/index.js",
       "file": "rxjs.js",
+<<<<<<< Updated upstream
       "fileHash": "626a06ba",
       "needsInterop": false
     },
@@ -50,10 +82,14 @@
       "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
       "fileHash": "6020fec8",
+=======
+      "fileHash": "7d9165e2",
+>>>>>>> Stashed changes
       "needsInterop": false
     }
   },
   "chunks": {
+<<<<<<< Updated upstream
     "chunk-B4RAQXO7": {
       "file": "chunk-B4RAQXO7.js"
     },
@@ -69,6 +105,17 @@
     "chunk-DSDBU36N": {
       "file": "chunk-DSDBU36N.js"
     },
+=======
+    "chunk-V3OQKLMX": {
+      "file": "chunk-V3OQKLMX.js"
+    },
+    "chunk-DXU7SYAQ": {
+      "file": "chunk-DXU7SYAQ.js"
+    },
+    "chunk-DSDBU36N": {
+      "file": "chunk-DSDBU36N.js"
+    },
+>>>>>>> Stashed changes
     "chunk-YBNECNG7": {
       "file": "chunk-YBNECNG7.js"
     },
