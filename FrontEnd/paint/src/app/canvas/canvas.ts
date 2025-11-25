@@ -190,7 +190,6 @@ export class Canvas {
         this.shapeConfigs[this.activeShapeIndex].stroke=c;
         this.shapeConfigsChange.emit(this.shapeConfigs);
         this.updateBackend(this.shapeConfigs[this.activeShapeIndex]);
-
       }
     }));
     this.subs.add(this.service.fillColor$.subscribe(c => {
@@ -214,8 +213,6 @@ export class Canvas {
         this.shapeConfigs[this.activeShapeIndex].fill=c;
         this.shapeConfigsChange.emit(this.shapeConfigs);
         this.updateBackend(this.shapeConfigs[this.activeShapeIndex]);
-
-
       }
     }));
     this.subs.add(this.service.strokeWidth$.subscribe(c => {
@@ -243,9 +240,6 @@ export class Canvas {
         this.updateBackend(this.shapeConfigs[this.activeShapeIndex]);
       }
     }));
-    // this.subs.add(this.service.eraser$.subscribe(c => {
-    //   this.eraser = c;
-    // }))
   }
 
   ngAfterViewInit() {
@@ -629,11 +623,37 @@ export class Canvas {
 
   handleDragEnd(event: NgKonvaEventObject<MouseEvent>, index: number) {
     const node = event.event.target
-    this.shapeConfigs[index] = {
-      ...this.shapeConfigs[index],
-      x: node.x(),
-      y: node.y()
+    console.log(node)
+    if (node.attrs.type === 'line') {
+      let line = this.shapeConfigs[index] as LineConfig
+      const oldPoints = line.points ?? []
+      // node.x() and node.y() now contain the drag offset
+      // We need to add this offset to each point and reset node position to 0
+      const dx = node.x()
+      const dy = node.y()
+      let newPoints: number[] = []
+      for (let i = 0; i < oldPoints.length; i += 2) {
+        newPoints.push(oldPoints[i] + dx)
+        newPoints.push(oldPoints[i + 1] + dy)
+      }
+      // Reset node position to 0 since points are now absolute
+      node.x(0)
+      node.y(0)
+      this.shapeConfigs[index] = {
+        ...line,
+        points: newPoints,
+        x: 0,
+        y: 0
+      }
     }
+    else {
+        this.shapeConfigs[index] = {
+        ...this.shapeConfigs[index],
+        x: node.x(),
+        y: node.y()
+      }
+    }
+    this.shapeConfigsChange.emit(this.shapeConfigs)
     this.updateBackend(this.shapeConfigs[index]);
   }
 
@@ -683,10 +703,11 @@ export class Canvas {
   public updateBackend(original:ShapeConfig){
 
     this.shapeServie.update(this.shapedto.transform(original)).subscribe({
-      next: (copied: ShapeDTO) => {
-        console.log("Updated in backend:", copied);
+      next: (updated: ShapeDTO) => {
+        console.log("Updated in backend:");
+        console.log(original)
       },
-      error: err => console.error("Copy error:", err)
+      error: err => console.error("Update error:", err)
     });
   }
 

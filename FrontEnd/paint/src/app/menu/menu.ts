@@ -28,7 +28,7 @@ export class Menu {
 
   filename = signal('my-drawing'); // Default filename
   selectedFormat = 'json';
-  mockDirectory = 'D:/Engineering';
+  mockDirectory = 'D:/Engineering'; 
   
   // Temporary input for the Load Modal
   fileToLoadInput = '';
