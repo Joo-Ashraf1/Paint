@@ -341,30 +341,34 @@ export class Canvas {
 
   handleStageMouseUp() {
     this.isDrawing = false
+    const newId = Date.now().toString();
 
     switch (this.currentTool) {
+
       case "line":
-        this.shapeConfigs.push({ ...this.lineShape })
+
+        this.shapeConfigs.push({ ...this.lineShape, id:newId  })
         this.lineShape = {...this.lineShape, visible : false}
         break;
       case "square":
-        this.shapeConfigs.push({ ...this.squareShape })
+
+        this.shapeConfigs.push({ ...this.squareShape, id:newId   })
         this.squareShape = {...this.squareShape, visible : false}
         break;
       case "rectangle":
-        this.shapeConfigs.push({ ...this.rectangleShape })
+        this.shapeConfigs.push({ ...this.rectangleShape, id:newId   })
         this.rectangleShape = {...this.rectangleShape, visible : false}
         break;
       case "circle":
-        this.shapeConfigs.push({ ...this.circleShape })
+        this.shapeConfigs.push({ ...this.circleShape, id:newId   })
         this.circleShape = {...this.circleShape, visible : false}
         break;
       case "ellipse":
-        this.shapeConfigs.push({ ...this.ellipseShape })
+        this.shapeConfigs.push({ ...this.ellipseShape, id:newId   })
         this.ellipseShape = {...this.ellipseShape, visible : false}
         break;
       case "triangle":
-        this.shapeConfigs.push({ ...this.triangleShape })
+        this.shapeConfigs.push({ ...this.triangleShape, id:newId   })
         this.triangleShape = {...this.triangleShape, visible : false}
         break;
     }
@@ -384,25 +388,46 @@ export class Canvas {
   }
 
   public select(event: NgKonvaEventObject<MouseEvent>) {
-    const shapeNode = event.event.target as Konva.Node
-    console.log(shapeNode)
-    // const node = ref.getNode()
-    let tr: Konva.Transformer
-    let other_tr: Konva.Transformer
+    const shapeNode = event.event.target as Konva.Node;
+    if (!shapeNode) return;
+
+    if (this.eraser) {
+      const id = shapeNode.getAttr('id') ?? shapeNode.attrs?.id;
+
+      if (id !== undefined && id !== null) {
+        const index = this.shapeConfigs.findIndex(s => s['id'] === id);
+        if (index > -1) {
+          this.shapeConfigs.splice(index, 1);
+          //I used splice because it shifts the elements after deleted one index
+          this.shapeConfigs = [...this.shapeConfigs];
+
+          try {
+            const tr1 = this.transformer.getStage() as Konva.Transformer;
+            const tr2 = this.transReg.getStage() as Konva.Transformer;
+            if (tr1) { tr1.nodes([]); tr1.getLayer()?.batchDraw(); }
+            if (tr2) { tr2.nodes([]); tr2.getLayer()?.batchDraw(); }
+          } catch (err) {
+
+          }
+        }
+      }
+
+      return;
+    }
+
+    
+    let tr: Konva.Transformer;
+    let other_tr: Konva.Transformer;
     if (shapeNode.attrs['type'] === 'square' || shapeNode.attrs['type'] === 'circle') {
-      tr = this.transReg.getStage() as Konva.Transformer
-      other_tr = this.transformer.getStage() as Konva.Transformer
-    }
-    else {
-      tr = this.transformer.getStage() as Konva.Transformer
-      other_tr = this.transReg.getStage() as Konva.Transformer
+      tr = this.transReg.getStage() as Konva.Transformer;
+      other_tr = this.transformer.getStage() as Konva.Transformer;
+    } else {
+      tr = this.transformer.getStage() as Konva.Transformer;
+      other_tr = this.transReg.getStage() as Konva.Transformer;
     }
 
-    tr.nodes([shapeNode])
-    other_tr.nodes([])
-    // tr.getLayer()?.batchDraw()
-
-    //check for this.currentTool === 'copy' and then send copy request
+    tr.nodes([shapeNode]);
+    other_tr.nodes([]);
   }
 
   public checkDeselect(event: NgKonvaEventObject<MouseEvent>) {
