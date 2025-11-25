@@ -28,7 +28,7 @@ export class DtoToShapeConfigPipe implements PipeTransform {
 
       case 'line':
         const line: LineConfig = {
-          ...baseConfig,
+          ...(baseConfig as LineConfig),
           type: 'line',
           points: [dto.x_start, dto.y_start, dto.x_end, dto.y_end]
         };
@@ -37,7 +37,7 @@ export class DtoToShapeConfigPipe implements PipeTransform {
       case 'square':
         const squareSide = dto.side ?? 0;
         const square: RectConfig = {
-          ...baseConfig,
+          ...(baseConfig as RectConfig),
           type: 'square',
           x: dto.x_start,
           y: dto.y_start,
@@ -48,7 +48,7 @@ export class DtoToShapeConfigPipe implements PipeTransform {
 
       case 'rectangle':
         const rectangle: RectConfig = {
-          ...baseConfig,
+          ...(baseConfig as RectConfig),
           type: 'rectangle',
           x: dto.x_start,
           y: dto.y_start,
@@ -60,7 +60,7 @@ export class DtoToShapeConfigPipe implements PipeTransform {
       case 'circle':
         const radius = dto.radius ?? 0;
         const circle: CircleConfig = {
-          ...baseConfig,
+          ...(baseConfig as CircleConfig),
           type: 'circle',
           x: dto.x_start + radius,
           y: dto.y_start + radius,
@@ -70,18 +70,18 @@ export class DtoToShapeConfigPipe implements PipeTransform {
 
       case 'ellipse':
         const ellipse: EllipseConfig = {
-          ...baseConfig,
+          ...(baseConfig as EllipseConfig),
           type: 'ellipse',
-          x: dto.x_start + (dto.x_radius ?? 0),
-          y: dto.y_start + (dto.y_radius ?? 0),
-          radiusX: dto.x_radius ?? 0,
-          radiusY: dto.y_radius ?? 0,
+          x: dto.x_start + (dto.radius_x ?? 0),
+          y: dto.y_start + (dto.radius_y ?? 0),
+          radiusX: dto.radius_x ?? 0,
+          radiusY: dto.radius_y ?? 0,
         };
         return ellipse;
 
       case 'triangle':
         const triangle: RegularPolygonConfig = {
-          ...baseConfig,
+          ...(baseConfig as RegularPolygonConfig),
           type: 'triangle',
           x: (dto.x_start + dto.x_end) / 2,
           y: (dto.y_start + dto.y_end) / 2,

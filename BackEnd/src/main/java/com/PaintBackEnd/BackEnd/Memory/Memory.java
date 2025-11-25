@@ -43,6 +43,7 @@ public class Memory {
 
     public Shape deleteShape(Shape shape) {
         if (shape == null) return null;
+        System.out.println("ID : " + shape.getId());
         return memoryShapes.remove(shape.getId());
     }
 

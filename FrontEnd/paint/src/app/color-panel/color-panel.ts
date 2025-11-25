@@ -1,4 +1,4 @@
-import {Component, Input, input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {ColorToCanvas} from '../color-to-canvas';
 
@@ -18,7 +18,9 @@ export class ColorPanel {
    currentMode:string="fill";
    maxStrokeWidth:number=50;
    minStrokeWidth:number=0;
-   eraser:boolean=false;
+  //  eraser:boolean=false;
+   @Input() colorPanelCurrentTool : string = 'select'
+   @Output() currentToolChange = new EventEmitter<string>()
    constructor(private service:ColorToCanvas) {}
 
 
@@ -82,7 +84,7 @@ export class ColorPanel {
     this.service.setFillColor(this.currentFillColor);
     this.service.setStrokeColor(this.currentStrokeColor);
     this.service.setStrokeWidth(this.currentStrokeWidth);
-    this.service.setEraser(this.eraser);
+    // this.service.setEraser(this.eraser);
   }
 
   onStrokeWidthChange(event: any) {
@@ -98,11 +100,13 @@ export class ColorPanel {
 
   }
   selectEraser() {
-     this.eraser=!this.eraser;
-     this.service.setEraser(this.eraser);
+    //  this.eraser=!this.eraser;
+    //  this.service.setEraser(this.eraser);
+     this.colorPanelCurrentTool = 'eraser'
+     this.currentToolChange.emit('eraser')
 
   }
   checkEraser() {
-     return this.eraser;
+     return (this.colorPanelCurrentTool === 'eraser');
   }
 }

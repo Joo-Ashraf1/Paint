@@ -15,7 +15,7 @@ export class ShapeDtoPipe implements PipeTransform {
   transform(shape : ShapeConfig): ShapeDTO {
     let result : ShapeDTO = {
       shapeType  : shape['type'],
-      id : 0,
+      id : parseInt(shape['id']?? '0'),
       rotation : shape['rotation']?? 0,
       x_start : 0,
       y_start : 0,
@@ -74,8 +74,8 @@ export class ShapeDtoPipe implements PipeTransform {
         const ellipse : EllipseConfig = shape as EllipseConfig
         result = {
           ...result,
-          x_radius : ellipse.radiusX,
-          y_radius : ellipse.radiusY,
+          radius_x : ellipse.radiusX,
+          radius_y : ellipse.radiusY,
           x_start : (ellipse.x?? 0) - ellipse.radiusX,
           y_start : (ellipse.y?? 0) - ellipse.radiusY,
           x_end : (ellipse.x?? 0) + ellipse.radiusX,

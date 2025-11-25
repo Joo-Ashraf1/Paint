@@ -21,7 +21,7 @@ import {
 import { SideToRadiusPipe } from '../pipes/side-to-radius-pipe'
 import { ColorToCanvas } from '../color-to-canvas';
 import { Subscription } from 'rxjs';
-import {DtoToShapeConfigPipe} from '../pipes/dto-to-shape-config-pipe';
+import { DtoToShapeConfigPipe } from '../pipes/dto-to-shape-config-pipe';
 
 
 @Component({
@@ -29,7 +29,7 @@ import {DtoToShapeConfigPipe} from '../pipes/dto-to-shape-config-pipe';
   imports: [StageComponent, CoreShapeComponent],
   templateUrl: './canvas.html',
   styleUrl: './canvas.css',
-  providers: [SideToRadiusPipe, ShapeDtoPipe,DtoToShapeConfigPipe]
+  providers: [SideToRadiusPipe, ShapeDtoPipe, DtoToShapeConfigPipe]
 })
 export class Canvas {
   constructor(
@@ -37,7 +37,7 @@ export class Canvas {
     private shapeServie: ShapeService,
     private shapedto: ShapeDtoPipe,
     private service: ColorToCanvas,
-    private dtoToShape:DtoToShapeConfigPipe
+    private dtoToShape: DtoToShapeConfigPipe
   ) { }
 
   @ViewChild('transformer') transformer!: KonvaComponent
@@ -49,12 +49,14 @@ export class Canvas {
   @ViewChild('selectionButtons') selectionButtons!: KonvaComponent
   @ViewChild("canvas_wrap_ref") canvas_wrap_element: any
   @ViewChild('stageRef') stageRef!: KonvaComponent;
-  @Input("currentTool") currentTool = 'select'
-  @Output("currentToolChange") currentToolChange = new EventEmitter<string>()
+
+  @Input() currentTool = 'select'
+  @Output() currentToolChange = new EventEmitter<string>()
+
   currentFillColor = "white"
   currentStrokeColor = "black"
   currentStrokeWidth = 3
-  eraser:boolean=false;
+  eraser: boolean = false;
 
   public configStage: StageConfig = {
     width: window.innerWidth,
@@ -66,8 +68,8 @@ export class Canvas {
     visible: false,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "line"
+    draggable: true,
+    type: "line"
   }
   squareShape: RectConfig = {
     x: 0,
@@ -78,8 +80,8 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "square"
+    draggable: true,
+    type: "square"
 
   };
   rectangleShape: RectConfig = {
@@ -91,8 +93,8 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "rectangle"
+    draggable: true,
+    type: "rectangle"
 
   };
   circleShape: CircleConfig = {
@@ -103,8 +105,8 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "circle"
+    draggable: true,
+    type: "circle"
   };
   ellipseShape: EllipseConfig = {
     x: 0,
@@ -115,8 +117,8 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "ellipse"
+    draggable: true,
+    type: "ellipse"
   };
   triangleShape: RegularPolygonConfig = {
     x: 0,
@@ -127,8 +129,8 @@ export class Canvas {
     fill: this.currentFillColor,
     stroke: this.currentStrokeColor,
     strokeWidth: this.currentStrokeWidth,
-    draggable : true,
-    type : "triangle"
+    draggable: true,
+    type: "triangle"
   };
 
 
@@ -171,9 +173,9 @@ export class Canvas {
     this.subs.add(this.service.strokeWidth$.subscribe(c => {
       this.currentStrokeWidth = c;
     }));
-    this.subs.add(this.service.eraser$.subscribe(c => {
-      this.eraser = c;
-    }))
+    // this.subs.add(this.service.eraser$.subscribe(c => {
+    //   this.eraser = c;
+    // }))
   }
 
   ngAfterViewInit() {
@@ -205,65 +207,65 @@ export class Canvas {
       case "line":
         this.lineShape = {
           ...this.lineShape,
-          points : [this.x_start, this.y_start],
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          points: [this.x_start, this.y_start],
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
       case "square":
         this.squareShape = {
           ...this.squareShape,
-          x : this.x_start,
-          y : this.y_start,
-          fill : this.currentFillColor,
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          x: this.x_start,
+          y: this.y_start,
+          fill: this.currentFillColor,
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
       case "rectangle":
         this.rectangleShape = {
           ...this.rectangleShape,
-          x : this.x_start,
-          y : this.y_start,
-          fill : this.currentFillColor,
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          x: this.x_start,
+          y: this.y_start,
+          fill: this.currentFillColor,
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
       case "circle":
         this.circleShape = {
           ...this.circleShape,
-          x : this.x_start,
-          y : this.y_start,
-          fill : this.currentFillColor,
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          x: this.x_start,
+          y: this.y_start,
+          fill: this.currentFillColor,
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
       case "ellipse":
         this.ellipseShape = {
           ...this.ellipseShape,
-          x : this.x_start,
-          y : this.y_start,
-          fill : this.currentFillColor,
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          x: this.x_start,
+          y: this.y_start,
+          fill: this.currentFillColor,
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
       case "triangle":
         this.triangleShape = {
           ...this.triangleShape,
-          x : this.x_start,
-          y : this.y_start,
-          fill : this.currentFillColor,
-          stroke : this.currentStrokeColor,
-          strokeWidth : this.currentStrokeWidth,
-          visible : true
+          x: this.x_start,
+          y: this.y_start,
+          fill: this.currentFillColor,
+          stroke: this.currentStrokeColor,
+          strokeWidth: this.currentStrokeWidth,
+          visible: true
         }
         break;
     }
@@ -341,7 +343,7 @@ export class Canvas {
   }
 
   handleStageMouseUp() {
-    if(!this.isDrawing|| this.currentTool === 'copy' ||this.currentTool === 'select') {
+    if (!this.isDrawing || this.currentTool === 'copy' || this.currentTool === 'select' || this.currentTool === 'eraser') {
       return;
     }
     this.isDrawing = false
@@ -352,37 +354,38 @@ export class Canvas {
       case "line":
 
         this.shapeConfigs.push({ ...this.lineShape })
-        this.lineShape = {...this.lineShape, visible : false}
+        this.lineShape = { ...this.lineShape, visible: false }
         break;
       case "square":
 
-        this.shapeConfigs.push({ ...this.squareShape  })
-        this.squareShape = {...this.squareShape, visible : false}
+        this.shapeConfigs.push({ ...this.squareShape })
+        this.squareShape = { ...this.squareShape, visible: false }
         break;
       case "rectangle":
-        this.shapeConfigs.push({ ...this.rectangleShape  })
-        this.rectangleShape = {...this.rectangleShape, visible : false}
+        this.shapeConfigs.push({ ...this.rectangleShape })
+        this.rectangleShape = { ...this.rectangleShape, visible: false }
         break;
       case "circle":
-        this.shapeConfigs.push({ ...this.circleShape  })
-        this.circleShape = {...this.circleShape, visible : false}
+        this.shapeConfigs.push({ ...this.circleShape })
+        this.circleShape = { ...this.circleShape, visible: false }
         break;
       case "ellipse":
-        this.shapeConfigs.push({ ...this.ellipseShape})
-        this.ellipseShape = {...this.ellipseShape, visible : false}
+        this.shapeConfigs.push({ ...this.ellipseShape })
+        this.ellipseShape = { ...this.ellipseShape, visible: false }
         break;
       case "triangle":
-        this.shapeConfigs.push({ ...this.triangleShape})
-        this.triangleShape = {...this.triangleShape, visible : false}
+        this.shapeConfigs.push({ ...this.triangleShape })
+        this.triangleShape = { ...this.triangleShape, visible: false }
         break;
     }
 
     this.currentTool = 'select'
     this.currentToolChange.emit(this.currentTool)
 
-    const lastIndex : number = this.shapeConfigs.length - 1;
+    const lastIndex: number = this.shapeConfigs.length - 1;
     this.shapeServie.draw(this.shapedto.transform(this.shapeConfigs[lastIndex])).subscribe({
       next: (shape) => {
+        this.shapeConfigs[lastIndex] = {...this.shapeConfigs[lastIndex], id : shape.id.toString()}
         console.log('User created:', shape);
       },
       error: (error) => {
@@ -391,49 +394,37 @@ export class Canvas {
     })
   }
 
-  public select(event: NgKonvaEventObject<MouseEvent>, index:number) {
+  public select(event: NgKonvaEventObject<MouseEvent>, index: number) {
     const shapeNode = event.event.target as Konva.Node;
     if (!shapeNode) return;
 
-    if (this.eraser) {
-      const id = shapeNode.getAttr('id') ?? shapeNode.attrs?.id;
+    if (this.currentTool === 'eraser') {
+      console.log("id of shape in array : " + this.shapeConfigs[index]['id'])
+      this.shapeServie.delete(this.shapedto.transform(this.shapeConfigs[index])).subscribe({
+        error: err => console.error("Copy error:", err)
+      })
+      this.shapeConfigs.splice(index, 1);
+      //I used splice because it shifts the elements after deleted one index
+      // this.shapeConfigs = [...this.shapeConfigs];
 
-      if (id !== undefined && id !== null) {
-        const index = this.shapeConfigs.findIndex(s => s['id'] === id);
-        if (index > -1) {
-          this.shapeConfigs.splice(index, 1);
-          //I used splice because it shifts the elements after deleted one index
-          this.shapeConfigs = [...this.shapeConfigs];
+      try {
+        const tr1 = this.transformer.getStage() as Konva.Transformer;
+        const tr2 = this.transReg.getStage() as Konva.Transformer;
+        if (tr1) { tr1.nodes([]); tr1.getLayer()?.batchDraw(); }
+        if (tr2) { tr2.nodes([]); tr2.getLayer()?.batchDraw(); }
+      } catch (err) {
 
-          try {
-            const tr1 = this.transformer.getStage() as Konva.Transformer;
-            const tr2 = this.transReg.getStage() as Konva.Transformer;
-            if (tr1) { tr1.nodes([]); tr1.getLayer()?.batchDraw(); }
-            if (tr2) { tr2.nodes([]); tr2.getLayer()?.batchDraw(); }
-          } catch (err) {
-
-          }
-        }
       }
-
-      return;
     }
     // -------------- COPY MODE --------------
-    if (this.currentTool === "copy") {
-
-      // const id = shapeNode.getAttr("id");
-      // if (!id) return;
+    else if (this.currentTool === "copy") {
 
       const original = this.shapeConfigs[index];
       if (!original) return;
 
       this.shapeServie.copy(this.shapedto.transform(original)).subscribe({
         next: (copied: ShapeDTO) => {
-
-
-
           this.shapeConfigs.push(this.dtoToShape.transform(copied));
-
 
           // this.shapeConfigs = [...this.shapeConfigs];  //elstr dy elly hwa by7ot fel canvas
           console.log("Copied from backend:", copied);
@@ -441,40 +432,43 @@ export class Canvas {
         error: err => console.error("Copy error:", err)
       });
 
-      return;
     }
+    else {
+      let tr: Konva.Transformer;
+      let other_tr: Konva.Transformer;
+      if (shapeNode.attrs['type'] === 'square' || shapeNode.attrs['type'] === 'circle' || shapeNode.attrs['type'] === 'triangle') {
+        tr = this.transReg.getStage() as Konva.Transformer;
+        other_tr = this.transformer.getStage() as Konva.Transformer;
+      } else {
+        tr = this.transformer.getStage() as Konva.Transformer;
+        other_tr = this.transReg.getStage() as Konva.Transformer;
+      }
 
-
-
-    let tr: Konva.Transformer;
-    let other_tr: Konva.Transformer;
-    if (shapeNode.attrs['type'] === 'square' || shapeNode.attrs['type'] === 'circle' || shapeNode.attrs['type'] === 'triangle') {
-      tr = this.transReg.getStage() as Konva.Transformer;
-      other_tr = this.transformer.getStage() as Konva.Transformer;
-    } else {
-      tr = this.transformer.getStage() as Konva.Transformer;
-      other_tr = this.transReg.getStage() as Konva.Transformer;
+      tr.nodes([shapeNode]);
+      other_tr.nodes([]);
     }
-
-    tr.nodes([shapeNode]);
-    other_tr.nodes([]);
 
   }
 
 
 
 
-  public Deselect(event: NgKonvaEventObject<MouseEvent> | any) {
+  public Deselect(event: NgKonvaEventObject<MouseEvent>) {
+    if (!event) return;
+    const anyEvent = event as any;
+    if (!anyEvent.target && anyEvent.event && anyEvent.event.target) {
+      anyEvent.target = anyEvent.event.target;
+    }
+    if (!anyEvent.target) return;
 
-    if (!event || !event.target) return;
-
-    const clickedNode = event.target;
+    const clickedNode = anyEvent.target;
     const stage = this.stageRef.getStage();
     if (!stage) return;
 
     if (clickedNode === stage) {
       // clear transformers
       this.currentTool = 'select';
+      this.currentToolChange.emit('select')
       let tr = this.transformer.getStage() as Konva.Transformer;
       tr.nodes([]);
       tr.getLayer()?.batchDraw();
@@ -483,7 +477,6 @@ export class Canvas {
       tr.nodes([]);
       tr.getLayer()?.batchDraw();
     }
-
   }
 
   handleTransformEnd(event: NgKonvaEventObject<MouseEvent>, index: number) {
@@ -535,8 +528,8 @@ export class Canvas {
       this.shapeConfigs[index] = {
         ...this.shapeConfigs[index],
         points: linePoints,
-        x : node.x(),
-        y : node.y(),
+        x: node.x(),
+        y: node.y(),
         scaleX: 1,
         scaleY: 1,
         rotation: node.rotation()

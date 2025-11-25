@@ -9,5 +9,5 @@
   </div>
 
   <!-- Right Sidebar -->
-  <app-color-panel></app-color-panel>
+  <app-color-panel [colorPanelCurrentTool]="appSelectedTool" (currentToolChange)="appSelectedTool = $event"></app-color-panel>
 </main>

@@ -45,6 +45,7 @@ public class ShapeController {
 
     @DeleteMapping("/delete")
     public void delete(@RequestBody ShapeDTO shapeDTO){
+        System.out.println("Shape deleted type : " + shapeDTO.shapeType + ", id : " + shapeDTO.id);
         paintsrv.delete(shapeDTO);
     }
 

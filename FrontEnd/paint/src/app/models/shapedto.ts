@@ -26,6 +26,6 @@ export interface ShapeDTO {
     radius? : number,
 
     // ELLIPSE
-    x_radius? : number,
-    y_radius? : number
+    radius_x? : number,
+    radius_y? : number
 }
