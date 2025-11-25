@@ -1,13 +1,11 @@
 import { Component, ViewChild, Input, Output, EventEmitter, ElementRef } from '@angular/core'
-import { limitToStage } from './canvas.utils';
 import type { StageConfig } from 'konva/lib/Stage'
-import { Shape, ShapeConfig } from 'konva/lib/Shape'
+import { ShapeConfig } from 'konva/lib/Shape'
 import type { CircleConfig } from 'konva/lib/shapes/Circle'
 import type { RectConfig } from 'konva/lib/shapes/Rect'
 import type { LineConfig } from 'konva/lib/shapes/Line'
 import type { EllipseConfig } from 'konva/lib/shapes/Ellipse'
 import type { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon'
-import type { TextConfig } from 'konva/lib/shapes/Text'
 import type { TransformerConfig } from 'konva/lib/shapes/Transformer'
 import Konva from 'konva'
 import { ShapeService } from '../services/shape';
@@ -21,7 +19,6 @@ import {
   StageComponent,
 } from 'ng2-konva'
 import { SideToRadiusPipe } from '../pipes/side-to-radius-pipe'
-import { NodeConfig } from 'konva/lib/Node'
 import { ColorToCanvas } from '../color-to-canvas';
 import { Subscription } from 'rxjs';
 import {DtoToShapeConfigPipe} from '../pipes/dto-to-shape-config-pipe';
@@ -58,6 +55,11 @@ export class Canvas {
   currentStrokeColor = "black"
   currentStrokeWidth = 3
   eraser:boolean=false;
+
+  public configStage: StageConfig = {
+    width: window.innerWidth,
+    height: window.innerHeight
+  }
 
   lineShape: LineConfig = {
     points: [],
@@ -137,41 +139,6 @@ export class Canvas {
   x_end: number = 0
   y_end: number = 0
 
-  //here 3mk youssef handles inputs from color panel
-
-  private subs = new Subscription();
-  ngOnInit() {
-    this.subs.add(this.service.strokeColor$.subscribe(c => {
-      this.currentStrokeColor = c;
-    }));
-    this.subs.add(this.service.fillColor$.subscribe(c => {
-      this.currentFillColor = c;
-    }));
-    this.subs.add(this.service.strokeWidth$.subscribe(c => {
-      this.currentStrokeWidth = c;
-    }));
-    this.subs.add(this.service.eraser$.subscribe(c => {
-      this.eraser = c;
-    }))
-  }
-  public configStage: StageConfig = {
-    width: window.innerWidth,
-    height: window.innerHeight
-  }
-
-  ngAfterViewInit() {
-    const rect = this.canvas_wrap_element.nativeElement.getBoundingClientRect()
-
-    this.configStage = {
-      width: rect.width,
-      height: rect.height
-    }
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
-
   shapeConfigs: ShapeConfig[] = []
 
   public trans_all: TransformerConfig = {
@@ -189,6 +156,37 @@ export class Canvas {
       'top-left', 'top-right',
       'bottom-left', 'bottom-right',
     ]
+  }
+
+  //here 3mk youssef handles inputs from color panel
+
+  private subs = new Subscription();
+  ngOnInit() {
+    this.subs.add(this.service.strokeColor$.subscribe(c => {
+      this.currentStrokeColor = c;
+    }));
+    this.subs.add(this.service.fillColor$.subscribe(c => {
+      this.currentFillColor = c;
+    }));
+    this.subs.add(this.service.strokeWidth$.subscribe(c => {
+      this.currentStrokeWidth = c;
+    }));
+    this.subs.add(this.service.eraser$.subscribe(c => {
+      this.eraser = c;
+    }))
+  }
+
+  ngAfterViewInit() {
+    const rect = this.canvas_wrap_element.nativeElement.getBoundingClientRect()
+
+    this.configStage = {
+      width: rect.width,
+      height: rect.height
+    }
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   handleStageMouseDown() {
@@ -466,7 +464,7 @@ export class Canvas {
 
 
 
-  public checkDeselect(event: NgKonvaEventObject<MouseEvent> | any) {
+  public Deselect(event: NgKonvaEventObject<MouseEvent> | any) {
 
     if (!event || !event.target) return;
 
@@ -490,16 +488,61 @@ export class Canvas {
 
   handleTransformEnd(event: NgKonvaEventObject<MouseEvent>, index: number) {
     const node = event.event.target
-    this.shapeConfigs[index] = {
-      ...this.shapeConfigs[index],
-      x: node.x(),
-      y: node.y(),
-      width: node.width() * node.scaleX(),
-      height: node.height() * node.scaleY(),
-      scaleX: 1,
-      scaleY: 1,
-      rotation: node.rotation()
+    if (this.shapeConfigs[index]['type'] === 'circle') {
+      const r = (node.width() * node.scaleX()) / 2;
+      this.shapeConfigs[index] = {
+        ...this.shapeConfigs[index],
+        radius: r,
+        x: node.x(),
+        y: node.y(),
+        scaleX: 1,
+        scaleY: 1,
+        rotation: node.rotation()
+      }
     }
+    else if (this.shapeConfigs[index]['type'] === 'ellipse') {
+      const rx = (node.width() * node.scaleX()) / 2;
+      const ry = (node.height() * node.scaleY()) / 2;
+      this.shapeConfigs[index] = {
+        ...this.shapeConfigs[index],
+        radiusX: rx,
+        radiusY: ry,
+        x: node.x(),
+        y: node.y(),
+        scaleX: 1,
+        scaleY: 1,
+        rotation: node.rotation()
+      }
+    }
+    else if (this.shapeConfigs[index]['type'] === 'line') {
+      let linePoints: number[] = this.shapeConfigs[index]['points']
+      for (let i = 0; i < linePoints.length; i += 2) {
+        linePoints[i] = linePoints[i] * node.scaleX()
+        linePoints[i + 1] = linePoints[i + 1] * node.scaleY()
+      }
+      this.shapeConfigs[index] = {
+        ...this.shapeConfigs[index],
+        points: linePoints,
+        x : node.x(),
+        y : node.y(),
+        scaleX: 1,
+        scaleY: 1,
+        rotation: node.rotation()
+      }
+    }
+    else {
+      this.shapeConfigs[index] = {
+        ...this.shapeConfigs[index],
+        x: node.x(),
+        y: node.y(),
+        width: node.width() * node.scaleX(),
+        height: node.height() * node.scaleY(),
+        scaleX: 1,
+        scaleY: 1,
+        rotation: node.rotation()
+      }
+    }
+
     node.scaleX(1)
     node.scaleY(1)
   }
@@ -552,7 +595,7 @@ export class Canvas {
     if (stage)
       stage.container().style.cursor = 'move'
 
-    const mousePos = stage?.getPointerPosition()
+    // const mousePos = stage?.getPointerPosition()
     // this.shapeConfigs[shapeIndex] = {...this.shapeConfigs[shapeIndex], x : mousePos.x, y : mousePos.y}
     // this.ShapePosText = { ...this.ShapePosText, text: 'shape position: x = ' + mousePos.x + ', y = ' + mousePos.y }
   }
