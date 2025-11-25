@@ -17,8 +17,8 @@ public class SaveController {
     private Saver saver = new Saver() ;
     private final Memory mem = Memory.getInstance();
 
-    @PostMapping("/save/{path}")
-    public String save(@PathVariable String path){
+    @PostMapping("/save")
+    public String save(@RequestBody String path){
         try {
             saver.save(path);
             return "success";
@@ -27,8 +27,8 @@ public class SaveController {
         }
     }
 
-    @PostMapping("/load/{path}")
-    public List<ShapeDTO> load(@PathVariable String path){
+    @PostMapping("/load")
+    public List<ShapeDTO> load(@RequestBody String path){
         try {
             saver.load(path);
             return mem.getAllDtos();
