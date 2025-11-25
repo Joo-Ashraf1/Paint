@@ -20,6 +20,8 @@ export class DtoToShapeConfigPipe implements PipeTransform {
       fill: dto.fill,
       stroke: dto.stroke,
       strokeWidth: dto.strokeWidth,
+      visible : true,
+      draggable : true
     };
 
     switch (dto.shapeType) {

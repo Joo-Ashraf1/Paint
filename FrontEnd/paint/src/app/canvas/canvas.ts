@@ -448,7 +448,7 @@ export class Canvas {
 
     let tr: Konva.Transformer;
     let other_tr: Konva.Transformer;
-    if (shapeNode.attrs['type'] === 'square' || shapeNode.attrs['type'] === 'circle') {
+    if (shapeNode.attrs['type'] === 'square' || shapeNode.attrs['type'] === 'circle' || shapeNode.attrs['type'] === 'triangle') {
       tr = this.transReg.getStage() as Konva.Transformer;
       other_tr = this.transformer.getStage() as Konva.Transformer;
     } else {
@@ -507,6 +507,18 @@ export class Canvas {
         ...this.shapeConfigs[index],
         radiusX: rx,
         radiusY: ry,
+        x: node.x(),
+        y: node.y(),
+        scaleX: 1,
+        scaleY: 1,
+        rotation: node.rotation()
+      }
+    }
+    else if (this.shapeConfigs[index]['type'] == 'triangle') {
+      const r = (node.width() * node.scaleX()) / 2;
+      this.shapeConfigs[index] = {
+        ...this.shapeConfigs[index],
+        radius: r,
         x: node.x(),
         y: node.y(),
         scaleX: 1,
