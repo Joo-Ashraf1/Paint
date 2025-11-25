@@ -51,8 +51,10 @@ public class ShapeController {
     @PostMapping("/copy")
     public ShapeDTO Copy(@RequestBody ShapeDTO shapeDTO) {
        paintsrv.copy(shapeDTO);
+        System.out.println("Copy ShapeDTO : "+mem.lastDTOAdded().shapeType+"  "+ mem.lastDTOAdded().id);
        return mem.lastDTOAdded();
     }
+
 
 
     @GetMapping("/all")

@@ -26,6 +26,7 @@ import { ColorToCanvas } from '../color-to-canvas';
 import { Subscription } from 'rxjs';
 import {DtoToShapeConfigPipe} from '../pipes/dto-to-shape-config-pipe';
 
+
 @Component({
   selector: 'app-canvas',
   imports: [StageComponent, CoreShapeComponent],
@@ -342,35 +343,38 @@ export class Canvas {
   }
 
   handleStageMouseUp() {
+    if(!this.isDrawing|| this.currentTool === 'copy' ||this.currentTool === 'select') {
+      return;
+    }
     this.isDrawing = false
-    const newId = Date.now().toString();
+    //const newId = Date.now().toString();
 
     switch (this.currentTool) {
 
       case "line":
 
-        this.shapeConfigs.push({ ...this.lineShape, id:newId  })
+        this.shapeConfigs.push({ ...this.lineShape })
         this.lineShape = {...this.lineShape, visible : false}
         break;
       case "square":
 
-        this.shapeConfigs.push({ ...this.squareShape, id:newId   })
+        this.shapeConfigs.push({ ...this.squareShape  })
         this.squareShape = {...this.squareShape, visible : false}
         break;
       case "rectangle":
-        this.shapeConfigs.push({ ...this.rectangleShape, id:newId   })
+        this.shapeConfigs.push({ ...this.rectangleShape  })
         this.rectangleShape = {...this.rectangleShape, visible : false}
         break;
       case "circle":
-        this.shapeConfigs.push({ ...this.circleShape, id:newId   })
+        this.shapeConfigs.push({ ...this.circleShape  })
         this.circleShape = {...this.circleShape, visible : false}
         break;
       case "ellipse":
-        this.shapeConfigs.push({ ...this.ellipseShape, id:newId   })
+        this.shapeConfigs.push({ ...this.ellipseShape})
         this.ellipseShape = {...this.ellipseShape, visible : false}
         break;
       case "triangle":
-        this.shapeConfigs.push({ ...this.triangleShape, id:newId   })
+        this.shapeConfigs.push({ ...this.triangleShape})
         this.triangleShape = {...this.triangleShape, visible : false}
         break;
     }
@@ -389,7 +393,7 @@ export class Canvas {
     })
   }
 
-  public select(event: NgKonvaEventObject<MouseEvent>) {
+  public select(event: NgKonvaEventObject<MouseEvent>, index:number) {
     const shapeNode = event.event.target as Konva.Node;
     if (!shapeNode) return;
 
@@ -419,10 +423,10 @@ export class Canvas {
     // -------------- COPY MODE --------------
     if (this.currentTool === "copy") {
 
-      const id = shapeNode.getAttr("id");
-      if (!id) return;
+      // const id = shapeNode.getAttr("id");
+      // if (!id) return;
 
-      const original = this.shapeConfigs.find(s => s.id === id);
+      const original = this.shapeConfigs[index];
       if (!original) return;
 
       this.shapeServie.copy(this.shapedto.transform(original)).subscribe({
@@ -433,7 +437,7 @@ export class Canvas {
           this.shapeConfigs.push(this.dtoToShape.transform(copied));
 
 
-          this.shapeConfigs = [...this.shapeConfigs];  //elstr dy elly hwa by7ot fel canvas
+          // this.shapeConfigs = [...this.shapeConfigs];  //elstr dy elly hwa by7ot fel canvas
           console.log("Copied from backend:", copied);
         },
         error: err => console.error("Copy error:", err)
@@ -462,19 +466,24 @@ export class Canvas {
 
 
 
-  public checkDeselect(event: NgKonvaEventObject<MouseEvent>) {
-    // If we clicked on the stage (empty area), deselect
-    const clickedNode = event.event.target
-    const stage = this.stageRef.getStage()
-    // const clickedOnEmpty = event.event.target === stage
-    if (stage && clickedNode === stage) {
-      let tr = this.transformer.getStage() as Konva.Transformer
-      tr.nodes([]) // Clear selection
-      tr.getLayer()?.batchDraw()
+  public checkDeselect(event: NgKonvaEventObject<MouseEvent> | any) {
 
-      tr = this.transReg.getStage() as Konva.Transformer
-      tr.nodes([]) // Clear selection
-      tr.getLayer()?.batchDraw()
+    if (!event || !event.target) return;
+
+    const clickedNode = event.target;
+    const stage = this.stageRef.getStage();
+    if (!stage) return;
+
+    if (clickedNode === stage) {
+      // clear transformers
+      this.currentTool = 'select';
+      let tr = this.transformer.getStage() as Konva.Transformer;
+      tr.nodes([]);
+      tr.getLayer()?.batchDraw();
+
+      tr = this.transReg.getStage() as Konva.Transformer;
+      tr.nodes([]);
+      tr.getLayer()?.batchDraw();
     }
 
   }

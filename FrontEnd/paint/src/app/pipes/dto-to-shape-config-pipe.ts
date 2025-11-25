@@ -12,7 +12,7 @@ import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
 })
 export class DtoToShapeConfigPipe implements PipeTransform {
 
-  transform(dto: ShapeDTO): ShapeConfig {
+  transform(dto: ShapeDTO): LineConfig|RectConfig|CircleConfig|EllipseConfig|RegularPolygonConfig {
 
     let baseConfig: ShapeConfig = {
       id: dto.id.toString(),

@@ -5,7 +5,7 @@
             (mouseup)="handleStageMouseUp()">
             <ko-layer class="canvas">
 
-                <ko-line [config]="lineShape"></ko-line>
+                <ko-line [config]="lineShape" ></ko-line>
                 <ko-rect [config]="squareShape"></ko-rect>
                 <ko-rect [config]="rectangleShape"></ko-rect>
                 <ko-circle [config]="circleShape"></ko-circle>
@@ -14,11 +14,11 @@
 
                 @for (shapeConfig of shapeConfigs; track $index) {
                 @if (shapeConfig['type'] === 'circle') {
-                <ko-circle #circleRef [config]="shapeConfig" (dragend)="handleDragEnd($event, $index)"
+                <ko-circle #circleRef [config]="shapeConfig" (dragend)="handleDragEnd($event, $index) "
                     (transformend)="handleTransformEnd($event, $index)"
                     (mousemove)="handleMouseMove($event, shapeConfig)" (mouseover)="handleMouseOver($event)"
                     (dragmove)="handleDragMove($event, $index)" (mouseup)="handeMouseUp($event)"
-                    (mouseleave)="handleMouseLeave($event)" (click)="select($event)">
+                    (mouseleave)="handleMouseLeave($event)" (click)="select($event , $index)">
                 </ko-circle>
                 }
                 @else if (shapeConfig['type'] === 'rectangle' || shapeConfig['type'] === 'square') {
@@ -26,7 +26,7 @@
                     (transformend)="handleTransformEnd($event, $index)"
                     (mousemove)="handleMouseMove($event, shapeConfig)" (mouseover)="handleMouseOver($event)"
                     (dragmove)="handleDragMove($event, $index)" (mouseup)="handeMouseUp($event)"
-                    (mouseleave)="handleMouseLeave($event)" (click)="select($event)">
+                    (mouseleave)="handleMouseLeave($event)" (click)="select($event, $index )">
                 </ko-rect>
                 }
                 @else if (shapeConfig['type'] === 'ellipse') {
@@ -34,7 +34,7 @@
                     (transformend)="handleTransformEnd($event, $index)"
                     (mousemove)="handleMouseMove($event, shapeConfig)" (mouseover)="handleMouseOver($event)"
                     (dragmove)="handleDragMove($event, $index)" (mouseup)="handeMouseUp($event)"
-                    (mouseleave)="handleMouseLeave($event)" (click)="select($event)">
+                    (mouseleave)="handleMouseLeave($event)" (click)="select($event, $index)">
                 </ko-ellipse>
                 }
                 @else if (shapeConfig['type'] === 'line') {
@@ -42,7 +42,7 @@
                     (transformend)="handleTransformEnd($event, $index)"
                     (mousemove)="handleMouseMove($event, shapeConfig)" (mouseover)="handleMouseOver($event)"
                     (dragmove)="handleDragMove($event, $index)" (mouseup)="handeMouseUp($event)"
-                    (mouseleave)="handleMouseLeave($event)" (click)="select($event)">
+                    (mouseleave)="handleMouseLeave($event)" (click)="select($event, $index)">
                 </ko-line>
                 }
                 @else if (shapeConfig['type'] === 'triangle' || shapeConfig['type'] === 'pentagon' ||
@@ -52,7 +52,7 @@
                     (transformend)="handleTransformEnd($event, $index)"
                     (mousemove)="handleMouseMove($event, shapeConfig)" (mouseover)="handleMouseOver($event)"
                     (dragmove)="handleDragMove($event, $index)" (mouseup)="handeMouseUp($event)"
-                    (mouseleave)="handleMouseLeave($event)" (click)="select($event)">
+                    (mouseleave)="handleMouseLeave($event)" (click)="select($event, $index)">
                 </ko-regular-polygon>
                 }
                 }
