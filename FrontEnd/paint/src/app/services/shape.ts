@@ -47,7 +47,13 @@ export class ShapeService {
     return this.http.get<ShapeDTO[]>(url, this.httpOptions)
   }
 
-  //save
+  save(path : string): Observable<string> {
+    const url = this.apiUrl + "/save"
+    return this.http.post<string>(url, path) // path example : btngan/gawafa/borto2an/shapes.xml / shapes.json
+  }
 
-  //load
+  load(path : string): Observable<ShapeDTO[]> {
+    const url = this.apiUrl + "/load"
+    return this.http.post<ShapeDTO[]>(url, path) // path example : btngan/gawafa/borto2an/shapes.xml / shapes.json
+  }
 }
