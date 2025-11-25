@@ -49,6 +49,7 @@ export class Canvas {
   @ViewChild('selectionButtons') selectionButtons!: KonvaComponent
   @ViewChild("canvas_wrap_ref") canvas_wrap_element: any
   @ViewChild('stageRef') stageRef!: KonvaComponent;
+  @ViewChild('layerRef', { static: true }) layerRef: any;
 
   @Input() currentTool = 'select'
   @Output() currentToolChange = new EventEmitter<string>()
@@ -57,6 +58,7 @@ export class Canvas {
   currentStrokeColor = "black"
   currentStrokeWidth = 3
   eraser: boolean = false;
+  activeShapeIndex: number | null = null;
 
   public configStage: StageConfig = {
     width: window.innerWidth,
@@ -167,12 +169,29 @@ export class Canvas {
   ngOnInit() {
     this.subs.add(this.service.strokeColor$.subscribe(c => {
       this.currentStrokeColor = c;
+      if(this.activeShapeIndex !== null&&this.shapeConfigs[this.activeShapeIndex]!==null) {
+        this.shapeConfigs[this.activeShapeIndex].stroke=c;
+        this.shapeConfigs = [...this.shapeConfigs];
+        this.updateBackend(this.shapeConfigs[this.activeShapeIndex]);
+
+      }
     }));
     this.subs.add(this.service.fillColor$.subscribe(c => {
       this.currentFillColor = c;
+      if(this.activeShapeIndex !== null&&this.shapeConfigs[this.activeShapeIndex]!==null) {
+        this.shapeConfigs[this.activeShapeIndex].fill=c;
+        this.shapeConfigs = [...this.shapeConfigs];
+        this.updateBackend(this.shapeConfigs[this.activeShapeIndex]);
+
+
+      }
     }));
     this.subs.add(this.service.strokeWidth$.subscribe(c => {
       this.currentStrokeWidth = c;
+      if(this.activeShapeIndex !== null&&this.shapeConfigs[this.activeShapeIndex]!==null) {
+        this.shapeConfigs[this.activeShapeIndex].strokeWidth=c;
+        this.updateBackend(this.shapeConfigs[this.activeShapeIndex]);
+      }
     }));
     // this.subs.add(this.service.eraser$.subscribe(c => {
     //   this.eraser = c;
@@ -438,6 +457,7 @@ export class Canvas {
 
     }
     else {
+      this.activeShapeIndex = index;
       let tr: Konva.Transformer;
       let other_tr: Konva.Transformer;
       if (shapeNode.attrs['type'] === 'square' || shapeNode.attrs['type'] === 'circle' || shapeNode.attrs['type'] === 'triangle') {
@@ -554,6 +574,7 @@ export class Canvas {
 
     node.scaleX(1)
     node.scaleY(1)
+    this.updateBackend(this.shapeConfigs[index]);
   }
 
   handleDragEnd(event: NgKonvaEventObject<MouseEvent>, index: number) {
@@ -563,6 +584,7 @@ export class Canvas {
       x: node.x(),
       y: node.y()
     }
+    this.updateBackend(this.shapeConfigs[index]);
   }
 
   public getRadius(sideLength: number, sides_number: number): number {
@@ -607,6 +629,15 @@ export class Canvas {
     // const mousePos = stage?.getPointerPosition()
     // this.shapeConfigs[shapeIndex] = {...this.shapeConfigs[shapeIndex], x : mousePos.x, y : mousePos.y}
     // this.ShapePosText = { ...this.ShapePosText, text: 'shape position: x = ' + mousePos.x + ', y = ' + mousePos.y }
+  }
+  public updateBackend(original:ShapeConfig){
+
+    this.shapeServie.update(this.shapedto.transform(original)).subscribe({
+      next: (copied: ShapeDTO) => {
+        console.log("Updated in backend:", copied);
+      },
+      error: err => console.error("Copy error:", err)
+    });
   }
 
 }
