@@ -24,6 +24,7 @@ import { SideToRadiusPipe } from '../pipes/side-to-radius-pipe'
 import { NodeConfig } from 'konva/lib/Node'
 import { ColorToCanvas } from '../color-to-canvas';
 import { Subscription } from 'rxjs';
+import {DtoToShapeConfigPipe} from '../pipes/dto-to-shape-config-pipe';
 
 @Component({
   selector: 'app-canvas',
@@ -37,7 +38,8 @@ export class Canvas {
     private sidetoradiuspipe: SideToRadiusPipe,
     private shapeServie: ShapeService,
     private shapedto: ShapeDtoPipe,
-    private service: ColorToCanvas
+    private service: ColorToCanvas,
+    private dtoToShape:DtoToShapeConfigPipe
   ) { }
 
   @ViewChild('transformer') transformer!: KonvaComponent
@@ -414,8 +416,34 @@ export class Canvas {
 
       return;
     }
+    // -------------- COPY MODE --------------
+    if (this.currentTool === "copy") {
 
-    
+      const id = shapeNode.getAttr("id");
+      if (!id) return;
+
+      const original = this.shapeConfigs.find(s => s.id === id);
+      if (!original) return;
+
+      this.shapeServie.copy(this.shapedto.transform(original)).subscribe({
+        next: (copied: ShapeDTO) => {
+
+
+
+          this.shapeConfigs.push(this.dtoToShape.transform(copied));
+
+
+          this.shapeConfigs = [...this.shapeConfigs];  //elstr dy elly hwa by7ot fel canvas
+          console.log("Copied from backend:", copied);
+        },
+        error: err => console.error("Copy error:", err)
+      });
+
+      return;
+    }
+
+
+
     let tr: Konva.Transformer;
     let other_tr: Konva.Transformer;
     if (shapeNode.attrs['type'] === 'square' || shapeNode.attrs['type'] === 'circle') {
@@ -428,7 +456,11 @@ export class Canvas {
 
     tr.nodes([shapeNode]);
     other_tr.nodes([]);
+
   }
+
+
+
 
   public checkDeselect(event: NgKonvaEventObject<MouseEvent>) {
     // If we clicked on the stage (empty area), deselect
@@ -444,6 +476,7 @@ export class Canvas {
       tr.nodes([]) // Clear selection
       tr.getLayer()?.batchDraw()
     }
+
   }
 
   handleTransformEnd(event: NgKonvaEventObject<MouseEvent>, index: number) {
