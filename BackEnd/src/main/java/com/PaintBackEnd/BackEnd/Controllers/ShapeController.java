@@ -40,6 +40,7 @@ public class ShapeController {
     @PutMapping("/update")
     public void update(@RequestBody ShapeDTO shapeDTO) throws CloneNotSupportedException {
         paintsrv.update(shapeDTO);
+        System.out.println("Shape updated "+shapeDTO.id  + "  " +shapeDTO.shapeType +"  " +shapeDTO.fill +" " +shapeDTO.stroke +" "+ shapeDTO.strokeWidth);
     }
 
     @DeleteMapping("/delete")

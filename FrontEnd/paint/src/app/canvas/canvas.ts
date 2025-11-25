@@ -166,30 +166,80 @@ export class Canvas {
   //here 3mk youssef handles inputs from color panel
 
   private subs = new Subscription();
+
   ngOnInit() {
+
     this.subs.add(this.service.strokeColor$.subscribe(c => {
+      let tr=this.transformer.getStage() as Konva.Transformer;
+      let selectedNodes = tr.nodes();
+      selectedNodes.forEach(node => {
+        const shape= node as Konva.Shape;
+        shape.stroke(c);
+        shape.getLayer()?.batchDraw();
+      });
+
+       tr=this.transReg.getStage() as Konva.Transformer;
+       selectedNodes = tr.nodes();
+        selectedNodes.forEach(node => {
+        const shape= node as Konva.Shape;
+        shape.stroke(c);
+        shape.getLayer()?.batchDraw();
+      });
       this.currentStrokeColor = c;
       if(this.activeShapeIndex !== null&&this.shapeConfigs[this.activeShapeIndex]!==null) {
         this.shapeConfigs[this.activeShapeIndex].stroke=c;
-        this.shapeConfigs = [...this.shapeConfigs];
+        this.shapeConfigsChange.emit(this.shapeConfigs);
         this.updateBackend(this.shapeConfigs[this.activeShapeIndex]);
 
       }
     }));
     this.subs.add(this.service.fillColor$.subscribe(c => {
+      let tr=this.transformer.getStage() as Konva.Transformer;
+      let selectedNodes = tr.nodes();
+      selectedNodes.forEach(node => {
+        const shape= node as Konva.Shape;
+        shape.fill(c);
+        shape.getLayer()?.batchDraw();
+      });
+
+      tr=this.transReg.getStage() as Konva.Transformer;
+      selectedNodes = tr.nodes();
+      selectedNodes.forEach(node => {
+        const shape= node as Konva.Shape;
+        shape.fill(c);
+        shape.getLayer()?.batchDraw();
+      });
       this.currentFillColor = c;
       if(this.activeShapeIndex !== null&&this.shapeConfigs[this.activeShapeIndex]!==null) {
         this.shapeConfigs[this.activeShapeIndex].fill=c;
-        this.shapeConfigs = [...this.shapeConfigs];
+        this.shapeConfigsChange.emit(this.shapeConfigs);
         this.updateBackend(this.shapeConfigs[this.activeShapeIndex]);
 
 
       }
     }));
     this.subs.add(this.service.strokeWidth$.subscribe(c => {
+      let tr=this.transformer.getStage() as Konva.Transformer;
+      let selectedNodes = tr.nodes();
+      selectedNodes.forEach(node => {
+        const shape= node as Konva.Shape;
+        shape.strokeWidth(c);
+        shape.getLayer()?.batchDraw();
+      });
+
+      tr=this.transReg.getStage() as Konva.Transformer;
+      selectedNodes = tr.nodes();
+      selectedNodes.forEach(node => {
+        const shape= node as Konva.Shape;
+        shape.strokeWidth(c);
+        shape.getLayer()?.batchDraw();
+      });
+
       this.currentStrokeWidth = c;
+
       if(this.activeShapeIndex !== null&&this.shapeConfigs[this.activeShapeIndex]!==null) {
         this.shapeConfigs[this.activeShapeIndex].strokeWidth=c;
+        this.shapeConfigsChange.emit(this.shapeConfigs);
         this.updateBackend(this.shapeConfigs[this.activeShapeIndex]);
       }
     }));
