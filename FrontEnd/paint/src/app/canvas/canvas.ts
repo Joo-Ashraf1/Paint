@@ -31,7 +31,7 @@ import {DtoToShapeConfigPipe} from '../pipes/dto-to-shape-config-pipe';
   imports: [StageComponent, CoreShapeComponent],
   templateUrl: './canvas.html',
   styleUrl: './canvas.css',
-  providers: [SideToRadiusPipe, ShapeDtoPipe]
+  providers: [SideToRadiusPipe, ShapeDtoPipe,DtoToShapeConfigPipe]
 })
 export class Canvas {
   constructor(
