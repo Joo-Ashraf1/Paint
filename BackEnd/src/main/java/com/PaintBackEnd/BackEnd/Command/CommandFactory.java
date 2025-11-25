@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CommandFactory {
-    public Command makeCommand(String command , Shape shape) {
+    public Command makeCommand(String command , Shape shape){
         switch (command) {
             case "draw":
                 return new Draw(shape);

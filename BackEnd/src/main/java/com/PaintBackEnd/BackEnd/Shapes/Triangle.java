@@ -16,17 +16,6 @@ public class Triangle extends Shape {
         this.setShapeType("triangle");
     }
 
-    public Shape clone() {
-        ShapeDTO dto;
-        dto = super.mapper.toDto(this);
-        dto.id = 0;
-        dto.x_end += 3;
-        dto.y_end += 3;
-        dto.x_start += 3;
-        dto.y_start += 3;
-        return super.factory.makeShape(dto);
-    }
-
     public double getSide() {
         return side;
     }

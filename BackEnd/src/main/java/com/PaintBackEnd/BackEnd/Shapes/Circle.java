@@ -16,17 +16,6 @@ public class Circle extends Shape {
         this.setShapeType("circle");
     }
 
-    public Shape clone() {
-        ShapeDTO dto;
-        dto = super.mapper.toDto(this);
-        dto.id = 0;
-        dto.x_end += 3;
-        dto.y_end += 3;
-        dto.x_start += 3;
-        dto.y_start += 3;
-        return super.factory.makeShape(dto);
-    }
-
     public double getRadius() {
         return radius;
     }

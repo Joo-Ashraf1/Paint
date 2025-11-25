@@ -6,7 +6,7 @@ public class Copy extends Command {
     private Shape shape;
     
     public Copy(Shape shape){
-        this.shape = shape.clone() ;
+        this.shape = (Shape) shape.clone();
     }
 
     @Override

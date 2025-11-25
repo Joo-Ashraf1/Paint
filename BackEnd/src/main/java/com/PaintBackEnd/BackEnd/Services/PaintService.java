@@ -17,26 +17,26 @@ public class PaintService {
 
     public PaintService(){}
 
-    public void draw (ShapeDTO dto){
+    public void draw (ShapeDTO dto) throws CloneNotSupportedException {
         dto.id = 0 ;
         Shape shape = shapesFactory.makeShape(dto);
         Command command = commandFactory.makeCommand("draw" , shape) ;
         commandManager.executeCommand(command);
     }
 
-    public void delete(ShapeDTO dto){
+    public void delete(ShapeDTO dto) throws CloneNotSupportedException {
         Shape shape = shapesFactory.makeShape(dto);
         Command command = commandFactory.makeCommand("delete" , shape) ;
         commandManager.executeCommand(command);
     }
 
-    public void update(ShapeDTO dto){
+    public void update(ShapeDTO dto) throws CloneNotSupportedException {
         Shape shape = shapesFactory.makeShape(dto);
         Command command = commandFactory.makeCommand("update" , shape) ;
         commandManager.executeCommand(command);
     }
 
-    public void copy(ShapeDTO dto){
+    public void copy(ShapeDTO dto) throws CloneNotSupportedException {
         Shape shape = shapesFactory.makeShape(dto);
         Command command = commandFactory.makeCommand("copy" , shape) ;
         commandManager.executeCommand(command);
@@ -49,6 +49,5 @@ public class PaintService {
     public void redo(){
         commandManager.redo();
     }
-
 
 }

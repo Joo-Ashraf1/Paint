@@ -20,10 +20,9 @@ public class ShapeController {
     private final Memory mem = Memory.getInstance();
 
     @PostMapping("/draw")
-    public ShapeDTO draw(@RequestBody ShapeDTO dto){
+    public ShapeDTO draw(@RequestBody ShapeDTO dto) throws CloneNotSupportedException {
         paintsrv.draw(dto);
         return mem.lastDTOAdded() ;
-
     }
 
     @GetMapping("/undo")
@@ -39,24 +38,20 @@ public class ShapeController {
     }
 
     @PutMapping("/update")
-    public void update(@RequestBody ShapeDTO shapeDTO){
+    public void update(@RequestBody ShapeDTO shapeDTO) throws CloneNotSupportedException {
         paintsrv.update(shapeDTO);
     }
 
     @DeleteMapping("/delete")
-    public void delete(@RequestBody ShapeDTO shapeDTO){
-        System.out.println("Shape deleted type : " + shapeDTO.shapeType + ", id : " + shapeDTO.id);
+    public void delete(@RequestBody ShapeDTO shapeDTO) throws CloneNotSupportedException {
         paintsrv.delete(shapeDTO);
     }
 
     @PostMapping("/copy")
-    public ShapeDTO Copy(@RequestBody ShapeDTO shapeDTO) {
+    public ShapeDTO Copy(@RequestBody ShapeDTO shapeDTO) throws CloneNotSupportedException {
        paintsrv.copy(shapeDTO);
-        System.out.println("Copy ShapeDTO : "+mem.lastDTOAdded().shapeType+"  "+ mem.lastDTOAdded().id);
        return mem.lastDTOAdded();
     }
-
-
 
     @GetMapping("/all")
     public List<ShapeDTO> getall(){

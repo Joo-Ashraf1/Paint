@@ -33,9 +33,6 @@ public abstract class Shape implements Cloneable {
     private int rotation;
 
 
-    protected ShapeMapper mapper = new ShapeMapper();
-    protected ShapesFactory factory = new ShapesFactory();
-
     public Shape(ShapeDTO dto) {
         this.shapeType = dto.shapeType;
         this.x_start = dto.x_start;
@@ -46,14 +43,27 @@ public abstract class Shape implements Cloneable {
         this.stroke = dto.stroke;
         this.rotation = dto.rotation;
         this.strokeWidth = dto.strokeWidth;
-        this.id = dto.id ;
+        this.id = dto.id;
         calculateCenter();
     }
 
     public Shape() {
     }
 
-    public abstract Shape clone() ;
+    public Object clone(){
+    try {
+        Shape shape = (Shape) super.clone();
+        shape.setId(0);
+        shape.setX_end(shape.getX_end() + 6);
+        shape.setY_end(shape.getY_end() + 6);
+        shape.setY_start(shape.getY_start() + 6);
+        shape.setX_start(shape.getX_start() + 6);
+        return shape;
+    }
+    catch (CloneNotSupportedException e) {
+        throw new AssertionError();
+    }
+    }
 
     private void calculateCenter() {
         this.xCenter = (this.x_end + this.x_start) / 2;
