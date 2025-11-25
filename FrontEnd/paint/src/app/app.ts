@@ -4,6 +4,7 @@ import { Toolbar } from './toolbar/toolbar'
 import { Menu } from './menu/menu'
 import { Canvas } from './canvas/canvas'
 import { ColorPanel } from './color-panel/color-panel'
+import { ShapeConfig } from 'konva/lib/Shape'
 
 
 @Component({
@@ -15,6 +16,8 @@ import { ColorPanel } from './color-panel/color-panel'
 export class App implements OnChanges {
   public title = signal("Paint")
   appSelectedTool : string = 'select'
+
+  appShapeConfigs : ShapeConfig[] = []
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(`selectedTool changed to ${this.appSelectedTool} from App`)

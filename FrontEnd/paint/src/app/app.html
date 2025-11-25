@@ -4,8 +4,9 @@
 
   <!-- Center Column -->
   <div class="center-area">
-    <app-menu (appToolChange)="appSelectedTool = $event" [menuSelectedTool]="appSelectedTool"></app-menu>
-    <app-canvas [currentTool]="appSelectedTool" (currentToolChange)="appSelectedTool = $event"></app-canvas>
+    <app-menu (appToolChange)="appSelectedTool = $event" [menuSelectedTool]="appSelectedTool" [menuShapeConfigs]="appShapeConfigs" (menuShapeConfigsChange)="appShapeConfigs = $event"></app-menu>
+    <app-canvas [currentTool]="appSelectedTool" (currentToolChange)="appSelectedTool = $event"
+    (shapeConfigsChange)="appShapeConfigs = $event" [shapeConfigs]="appShapeConfigs"></app-canvas>
   </div>
 
   <!-- Right Sidebar -->

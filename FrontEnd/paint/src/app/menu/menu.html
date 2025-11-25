@@ -18,14 +18,16 @@
         </div>
 
         <!-- Undo Button -->
-        <div class="history-btn" title="Undo" [class.flash]="flashUndo" (click)="triggerFlash('undo')"
+        <div class="history-btn" title="Undo" [class.flash]="flashUndo" (mousedown)="triggerFlash('undo')"
+            (click)="sendUndoRequest()"
             (animationend)="onFlashEnd()">
             <span class="arrow-icon undo-icon">↶</span>
             <span class="action-label">undo</span>
         </div>
 
         <!-- Redo Button -->
-        <div class="history-btn" title="Redo" [class.flash]="flashRedo" (click)="triggerFlash('redo')"
+        <div class="history-btn" title="Redo" [class.flash]="flashRedo" (mousedown)="triggerFlash('redo')"
+            (click)="sendRedoRequest()"
             (animationend)="onFlashEnd()">
             <span class="arrow-icon redo-icon">↷</span>
             <span class="action-label">redo</span>

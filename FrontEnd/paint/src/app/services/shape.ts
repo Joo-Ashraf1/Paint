@@ -37,14 +37,14 @@ export class ShapeService {
     return this.http.put<ShapeDTO>(url, shape, this.httpOptions)
   }
 
-  undo(shape : ShapeDTO): Observable<ShapeDTO> {
+  undo(): Observable<ShapeDTO[]> {
     const url = this.apiUrl + "/undo"
-    return this.http.get<ShapeDTO>(url, this.httpOptions)
+    return this.http.get<ShapeDTO[]>(url, this.httpOptions)
   }
 
-  redo(shape : ShapeDTO): Observable<ShapeDTO> {
+  redo(): Observable<ShapeDTO[]> {
     const url = this.apiUrl + "/redo"
-    return this.http.get<ShapeDTO>(url, this.httpOptions)
+    return this.http.get<ShapeDTO[]>(url, this.httpOptions)
   }
 
   //save

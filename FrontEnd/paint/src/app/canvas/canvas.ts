@@ -141,7 +141,8 @@ export class Canvas {
   x_end: number = 0
   y_end: number = 0
 
-  shapeConfigs: ShapeConfig[] = []
+  @Input() shapeConfigs: ShapeConfig[] = []
+  @Output() shapeConfigsChange = new EventEmitter<ShapeConfig[]>()
 
   public trans_all: TransformerConfig = {
     rotateEnabled: false,
@@ -386,10 +387,11 @@ export class Canvas {
     this.shapeServie.draw(this.shapedto.transform(this.shapeConfigs[lastIndex])).subscribe({
       next: (shape) => {
         this.shapeConfigs[lastIndex] = {...this.shapeConfigs[lastIndex], id : shape.id.toString()}
+        this.shapeConfigsChange.emit(this.shapeConfigs)
         console.log('User created:', shape);
       },
       error: (error) => {
-        console.error('Error creating user:', error);
+        console.error('Error Drawing Shape:', error);
       }
     })
   }
@@ -404,6 +406,7 @@ export class Canvas {
         error: err => console.error("Copy error:", err)
       })
       this.shapeConfigs.splice(index, 1);
+      this.shapeConfigsChange.emit(this.shapeConfigs)
       //I used splice because it shifts the elements after deleted one index
       // this.shapeConfigs = [...this.shapeConfigs];
 
@@ -425,6 +428,7 @@ export class Canvas {
       this.shapeServie.copy(this.shapedto.transform(original)).subscribe({
         next: (copied: ShapeDTO) => {
           this.shapeConfigs.push(this.dtoToShape.transform(copied));
+          this.shapeConfigsChange.emit(this.shapeConfigs)
 
           // this.shapeConfigs = [...this.shapeConfigs];  //elstr dy elly hwa by7ot fel canvas
           console.log("Copied from backend:", copied);
