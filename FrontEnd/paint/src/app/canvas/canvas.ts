@@ -411,7 +411,6 @@ export class Canvas {
       return;
     }
     this.isDrawing = false
-    //const newId = Date.now().toString();
 
     switch (this.currentTool) {
 
@@ -471,7 +470,6 @@ export class Canvas {
       this.shapeConfigs.splice(index, 1);
       this.shapeConfigsChange.emit(this.shapeConfigs)
       //I used splice because it shifts the elements after deleted one index
-      // this.shapeConfigs = [...this.shapeConfigs];
 
       try {
         const tr1 = this.transformer.getStage() as Konva.Transformer;
@@ -493,7 +491,6 @@ export class Canvas {
           this.shapeConfigs.push(this.dtoToShape.transform(copied));
           this.shapeConfigsChange.emit(this.shapeConfigs)
 
-          // this.shapeConfigs = [...this.shapeConfigs];  //elstr dy elly hwa by7ot fel canvas
           console.log("Copied from backend:", copied);
         },
         error: err => console.error("Copy error:", err)
@@ -517,9 +514,6 @@ export class Canvas {
     }
 
   }
-
-
-
 
   public Deselect(event: NgKonvaEventObject<MouseEvent>) {
     if (!event) return;
